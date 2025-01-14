@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Tool MVP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+
+        <!-- Main Menu Screen -->
+        <section id="main-menu">
+            <div class="up-nav"></div>
+            <div class="content">
+                <button class="nav-btn big-nav color-blue-medium" data-target="savings-forecast">Forecast</button>
+                <button class="nav-btn big-nav color-purple-light" data-target="budget-table">Budget</button>
+                <button class="nav-btn big-nav color-purple-medium" data-target="options">Options</button>
+            </div>
+            <div class="down-nav"></div>
+        </section>
+
+        <!-- Savings Forecasts Screen -->
+        <section id="savings-forecast">
+            <div class="up-nav"></div>
+            <!-- Savings forecast content -->
+            <div id="forecast-visualization" class="content">
+                <div class="forecast-inputs">
+                    <div class="forecast-input-group">
+                        <div class="row">
+                            <label for="forecast-initial">Initial Investment</label>
+                            <input type="number" id="forecast-initial" class="forecast-input" value="100"> €
+                        </div>
+                        <div class="row">
+                            <div id="forecast-initial-container" class="forecast-slider"></div>
+                        </div>
+                    </div>
+
+                    <div class="forecast-input-group">
+                        <div class="row">
+                            <label for="forecast-rate">Annual Interest Rate</label>
+                            <input type="number" id="forecast-rate" class="forecast-input" value="5" step="0.1"> %
+                        </div>
+                        <div class="row">
+                            <div id="forecast-rate-container" class="forecast-slider"></div>
+                        </div>
+                    </div>
+
+                    <div class="forecast-input-group">
+                        <div class="row">
+                            <label for="forecast-years">Investment Period</label>
+                            <input type="number" id="forecast-years" class="forecast-input" value="10"> Years
+                        </div>
+                        <div class="row">
+                            <div id="forecast-years-container" class="forecast-slider"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="forecast-results">
+                    <div>With Simple Interest: <span id="forecast-simple">0 €</span></div>
+                    <div>With Compound Interest: <span id="forecast-compound">0 €</span></div>
+                </div>
+
+                <div id="forecast-chart"></div>
+            </div>
+
+            <div class="down-nav">
+                <button class="nav-btn little-nav color-blue-light" data-target="reports">Report</button>
+                <button class="nav-btn little-nav color-blue-light" data-target="main-menu">Home</button>
+            </div>
+        </section>
+
+        <!-- Reports Screen -->
+        <section id="reports">
+            <div class="up-nav">
+                <button class="nav-btn little-nav color-teal" data-target="budget-table">Table</button>
+                <button class="nav-btn little-nav color-teal" data-target="budget-graph">Graph</button>
+                <button class="nav-btn little-nav color-teal" data-target="savings-forecast">Forecast</button>
+            </div>
+            <!-- Reports content -->
+            <div id="report-preview" class="content">
+                <div class="placeholder"></div>
+                <!-- PDF report preview will be dynamically generated here -->
+            </div>
+            <div class="down-nav">
+                <button class="nav-btn little-nav color-blue-light" data-target="main-menu">Home</button>
+            </div>
+        </section>
+
+        <!-- Options Screen -->
+        <section id="options">
+            <div class="up-nav"></div>
+            <div class="content">
+                <button id="import-btn" class="big-nav color-pink-bright">Import</button>
+                <button class="nav-btn big-nav color-pink-vibrant" data-target="reports">Reports</button>
+                <button id="export-btn" class="big-nav color-pink-soft">Export</button>
+                <button id="null-btn" class="big-nav ">Null</button>
+                <button id="dark-mode-btn" class="big-nav color-orange-light">Dark Mode</button>
+            </div>
+            <div class="down-nav">
+                <button class="nav-btn little-nav color-orange-light" data-target="main-menu">Home</button>
+            </div>
+        </section>
+
+        <!-- Budget Table View Screen -->
+        <section id="budget-table">
+            <div class="up-nav">
+                <button class="nav-btn little-nav color-blue-medium" data-target="budget-graph">Graph</button>
+                <button id="toggle-btn" class="square-btn color-blue-medium"> <i class="fa-solid fa-plus"></i></button>
+            </div>
+            <div id="add-data-container" class="content">
+                <div class="row">
+                    <button id="income-data-btn" class="little-nav color-blue-medium">Income</button>
+                    <button id="expense-data-btn" class="little-nav color-blue-medium">Expense</button>
+                    <button id="saving-data-btn" class="little-nav color-blue-medium">Saving</button>
+                </div>
+                <div class="row">
+                    <select id="category-select" class="color-blue-medium">
+                        <option value="salary">
+                            Salary
+                        </option>
+                    </select>
+                    <button class="nav-btn square-btn" data-target="categories">
+                        <i class="fa-solid fa-gear color-blue-medium"></i>
+                    </button>
+                </div>
+                <div class="row">
+                    <input id="add-desc" class="color-blue-medium" type="text" placeholder="Description">
+                    <input id="add-date" class="color-blue-medium" type="date">
+                </div>
+                <div class="row">
+                    <input id="add-amount" class="color-blue-medium" type="number" placeholder="0">
+                    <select id="add-frequency" class="frequency-select color-blue-medium">
+                        <option value="single">Single</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="monthly">Yearly</option>
+                    </select>
+                    <button id="add-data-btn" class="little-nav color-blue-medium">Add</button>
+                </div>
+            </div>
+            <div id="data-container">
+                <div class="placeholder"></div>
+                <div id="incomes">
+                    <div id="incomes-data-table">
+                        <!-- Budget data will be dynamically populated here -->
+                    </div>
+                </div>
+                <div id="expenses">
+                    <div id="expenses-data-table">
+                        <!-- Budget data will be dynamically populated here -->
+                    </div>
+                </div>
+                <div id="savings">
+                    <div id="savings-data-table">
+                        <!-- Budget data will be dynamically populated here -->
+                    </div>
+                </div>
+                <div id="balance"></div>
+            </div>
+            <div class="down-nav">
+                <button class="nav-btn little-nav color-purple-medium" data-target="reports">Report</button>
+                <button class="nav-btn little-nav color-purple-medium" data-target="main-menu">Home</button>
+            </div>
+        </section>
+
+        <!-- Categories Management Screen -->
+        <section id="categories">
+            <div class="up-nav"></div>
+            <div id="add-category-container" class="content">
+                <div class="row">
+                    <button id="income-category-btn" class="little-nav color-blue-medium">Income</button>
+                    <button id="expense-category-btn" class="little-nav color-blue-medium">Expense</button>
+                    <button id="saving-category-btn" class="little-nav color-blue-medium">Saving</button>
+                </div>
+                <div>
+
+
+                    <div class="row category-icons-row color-blue-medium">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-piggy-bank"></i>
+                        <i class="fa-solid fa-car"></i>
+                        <i class="fa-solid fa-mug-hot"></i>
+                        <i class="fa-solid fa-gift"></i>
+                        <i class="fa-solid fa-key"></i>
+                        <i class="fa-solid fa-briefcase"></i>
+                        <i class="fa-solid fa-landmark"></i>
+                        <i class="fa-solid fa-shirt"></i>
+                    </div>
+                    <div class="row category-icons-row color-blue-medium">
+                        <i class="fa-solid fa-stethoscope"></i>
+                        <i class="fa-solid fa-wrench"></i>
+                        <i class="fa-solid fa-medal"></i>
+                        <i class="fa-solid fa-chair"></i>
+                        <i class="fa-solid fa-utensils"></i>
+                        <i class="fa-solid fa-carrot"></i>
+                        <i class="fa-solid fa-blender"></i>
+                        <i class="fa-solid fa-paw"></i>
+                        <i class="fa-solid fa-gas-pump"></i>
+                    </div>
+                </div>
+                <div class="row">
+                    <input id="add-category-desc" type="text" placeholder="Description">
+                    <button id="add-data-category-btn" class="little-nav color-blue-medium">Add</button>
+                </div>
+
+                <div id="category-list">
+
+                    <!-- Category list will be dynamically generated here -->
+                </div>
+            </div>
+            <div class="down-nav">
+                <button class="nav-btn little-nav color-purple-medium" data-target="budget-table">Back</button>
+                <button class="nav-btn little-nav color-purple-medium" data-target="main-menu">Home</button>
+            </div>
+        </section>
+
+
+
+
+        <!-- Budget Graph View Screen -->
+        <section id="budget-graph">
+            <div class="up-nav">
+                <button class="nav-btn little-nav color-pink-bright" data-target="budget-table">Table</button>
+            </div>
+            <div id="graph-container" class="content">
+                <div class="placeholder"></div>
+                <!-- Budget graph will be dynamically generated here -->
+            </div>
+            <div class="down-nav">
+                <button class="nav-btn little-nav color-orange-light" data-target="reports">Report</button>
+                <button class="nav-btn little-nav color-orange-light" data-target="main-menu">Home</button>
+            </div>
+        </section>
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://kit.fontawesome.com/64fc752e27.js" crossorigin="anonymous"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
