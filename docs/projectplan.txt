@@ -16,57 +16,106 @@ Detailed file and folder structure:
 
 yrkesprov/
 │
-├── index.html          # Main application entry point
+├── index.html                 # Application entry point
 ├── css/
-│   ├── styles.css      # Main stylesheet
-│   └── responsive.css  # Responsive design overrides
-│├── js/
-│   ├── script.js       # Main application logic
-│   ├── modules/
-│   │   ├── income.js   # Income-related functions
-│   │   ├── expenses.js # Expense-related functions
-│   │   ├── savings.js  # Savings calculation logic
-│   │   └── reports.js  # Report generation functions
+│   └── styles.css            # Main stylesheet with theme support
+├── js/
+│   ├── script.js             # Application initialization
+│   ├── constants.js          # Global constants and enums
+│   ├── managers/
+│   │   ├── budgetManager.js  # Budget data operations
+│   │   ├── categoryManager.js # Category management
+│   │   ├── themeManager.js   # Theme switching logic
+│   │   ├── storageManager.js # Local storage interface
+│   │   └── navigation.js     # Screen navigation
+│   ├── components/
+│   │   ├── calculator.js     # Forecast calculations
+│   │   ├── visualizer.js     # D3.js visualizations
+│   │   └── transactionManager.js # Transaction handling
 │   └── utils/
-│       ├── storage.js  # Local storage management
-│       └── validation.js # Input validation helpers
+│       ├── formatter.js      # Data formatting
+│       └── validator.js      # Input validation
 │
 └── docs/               # Project documentation
 
 
 3.1 Screen Structure Overview
-3.1.1 Main Menu Screen
+3.1.1 Shared Components
 
-Central navigation hub, entrance point
-Buttons: Table, timeline, pie, category, forecast, reports, import, export, null, dark
+Navigation 
 
-3.1.2 Savings Forecasts Screen
+Section-specific navigation buttons
+Back button for sub-screens
 
-Calculate and visualize potential savings growth
-Savings Calculator with yearly savings input and expected interest rate
-Graphical forecast visualization comparing saving with/without interest
+Theme toggle button
+Common input components and forms
 
-3.1.3 Reports Screen
+3.1.2 Main Menu 
 
-Generate and view financial reports and visualizations
-PDF report generation section with preview
+Primary navigation hub
+Feature access buttons:
 
-3.1.4  Budget Table View Screen
+Table, Timeline, Pie
+Category management
+Forecast calculator
+Reports generation
+Import/Export functionality
+Data reset functionality
+Theme toggle 
 
-Shows budget information
-Function to add data
+3.1.3 Budget Management 
 
-3.1.5 Categories Management Screen
+Transaction type selection (Income/Expense/Saving)
+Data entry form:
 
-Allows managing budget categories
+Category dropdown
+Description field
+Amount input
+Date selector
+Frequency options
 
-3.1.6 Budget Timeline View Screen
+Categorized transaction list
+Balance summary
 
-Graphical view of budget data
+3.1.4 Category Management 
 
-3.1.7 Budget Pie View Screen
+Category type tabs
+Icon selection grid
+Category name input
+Existing categories list with delete option
+Category totals display
 
-Graphical view of budget data
+3.1.5 Data Visualizations
+
+Timeline View 
+Monthly transaction flow
+Running balance graph
+Period selectors
+
+Pie Chart View 
+Category distribution
+Interactive legends
+Detailed breakdowns
+
+3.1.6 Forecast Calculator 
+
+Input controls:
+Initial investment
+Interest rate
+Time period
+
+Comparative visualization:
+Simple vs. compound interest
+Interactive graph
+Summary statistics
+
+3.1.7 Reports 
+
+Report type selection
+Date range picker
+Format options
+Preview panel
+Export controls
 
 4. Functional Modules Project Plan
 
@@ -82,6 +131,8 @@ Key development considerations: validation, performance, code structure
 5. Data Management
 
 Local Storage strategy using JSON format
+
+Null
 
 6. State Management Approach
 
