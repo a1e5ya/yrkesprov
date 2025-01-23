@@ -1,11 +1,12 @@
 :root {
-  /* Theme colors (these will change in dark mode) */
+  /* Theme colors */
   --bg-primary: #faf9f7;
   --text-primary: #1E1E1E;
   --button-border: transparent;
+  --input-bg: #ffffff;
 
-  /* Your accent colors (these stay the same in both modes) */
-  --green-bright: #7DFFB2;
+  /* Accent colors */
+  --green-bright: #00d958;
   --green-muted: #71DDC3;
   --teal: #6AC0CF;
   --blue-light: #5994D7;
@@ -14,7 +15,7 @@
   --purple-medium: #A563E0;
   --pink-bright: #cb66e7;
   --pink-vibrant: #FF7DC6;
-  --pink-soft: #FF8F95;
+  --pink-soft: #ff878d;
   --orange-light: #FFA068;
   --orange-medium: #FEB13C;
   --orange-dark: #FCBB29;
@@ -23,8 +24,10 @@
 /* Dark mode overrides */
 [data-theme="dark"] {
   --bg-primary: #1E1E1E;
-  --text-primary: #faf9f788;
+  --text-primary: #faf9f7cc;
   --button-border: currentColor;
+  --input-bg: #2d2d2d;
+  --nav-buttons: #ffcb7d;
 }
 
 
@@ -42,6 +45,8 @@
 .color-orange-light { color: var(--orange-light); }
 .color-orange-medium { color: var(--orange-medium); }
 .color-orange-dark { color: var(--orange-dark); }
+.color-nav-buttons { color: var(--nav-buttons); }
+
 
 /* Background color utility classes */
 .bg-green-bright { background-color: var(--green-bright); }
@@ -88,8 +93,11 @@ section {
   flex-direction: column;
   justify-content: space-between;
   height: 100dvh;
-  width: 500px;
+  width: 100%;
+  max-width: 500px;
   margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 #main-menu {
@@ -111,6 +119,16 @@ section {
   align-items: center;
   padding: 25px ;
   height: 50px;
+  color: var(--nav-buttons);
+}
+
+.up-nav-reports {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 25px ;
+  height: 50px;
+  color: var(--nav-buttons);
 }
 
 .row {
@@ -121,10 +139,34 @@ section {
   gap: 20px;
 }
 
-input {
-  padding: 0;
-  margin: 0;
+input, select {
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  border: 1px solid var(--input-border);
+  border-radius: 3px;
+  transition: all 0.2s ease;
   height: 50px;
+}
+
+
+/* Placeholder text color */
+input::placeholder {
+  color: var(--placeholder-color);
+}
+
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--purple-light);
+  box-shadow: 0 0 0 2px rgba(126, 86, 236, 0.1);
+}
+
+
+/* Style number input spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 
@@ -200,12 +242,21 @@ button:active {
 
 height: auto;
 width: auto;
-  background: white;
+background-color: var(--input-bg);
   border-radius: 8px;
   padding: 20px;
   margin: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+.table-placeholder {
+  height: 300px;
+  width: 380px;
+}
+
+.placeholder-button {
+  width: 120px;
+  }
 
 #add-data-container {
 display: none;
@@ -217,6 +268,20 @@ display: none;
   padding: 0 5px;
   border: 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #add-desc, #add-date {
   width: 170px;
@@ -251,6 +316,8 @@ display: none;
   height: 50px;
   padding: 0 10px;
   border: 0;
+  background-color: var(--input-bg);
+  color: var(--teal);
 }
 
 .forecast-input-group label {
@@ -260,6 +327,63 @@ display: none;
 .forecast-input-group .row {
   justify-content: flex-start;
 }
+
+
+
+
+
+
+
+
+
+/* Budget Table Add Data Container Styles */
+
+/* Button states for type selection */
+#income-data-btn,
+#expense-data-btn,
+#saving-data-btn {
+    transition: all 0.3s ease;
+    border-width: 2px;
+}
+
+#income-data-btn.selected {
+    border-color: var(--green-bright);
+}
+
+#expense-data-btn.selected {
+    border-color: var(--pink-soft);
+}
+
+#saving-data-btn.selected {
+    border-color: var(--orange-medium);
+}
+
+
+
+/* Add data button colors */
+#add-data-btn.income-selected, #categories-btn.income-selected {
+    border-color: var(--green-bright);
+}
+
+#add-data-btn.expense-selected, #categories-btn.expense-selected {
+    border-color: var(--pink-soft);
+}
+
+#add-data-btn.saving-selected, #categories-btn.saving-selected {
+    border-color: var(--orange-medium);
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -274,3 +398,236 @@ display: none;
   border: 1px solid var(--light-gray);
 }
 
+
+
+#add-desc, 
+#add-amount,
+#add-category-desc {
+  color: var(--text-primary);
+}
+
+
+
+
+
+
+
+
+
+
+.category-icons-row i {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.category-icons-row i:hover {
+  transform: scale(1.2);
+}
+
+.category-icons-row i.selected {
+  transform: scale(1.2);
+
+}
+
+#category-list {
+    height: 400px;
+    min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  overflow-y: auto;
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer and Edge */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+#category-list::-webkit-scrollbar {
+  display: none;
+}
+
+.category-section-title {
+  color: var(--text-primary);
+  font-size: 16px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+
+/* Update category item styles */
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px;
+  color: var(--text-primary);
+}
+
+.category-item i {
+  font-size: 16px;
+  width: 20px;
+  opacity: 0.8;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.category-item i {
+  font-size: 20px;
+  width: 24px;
+  text-align: center;
+}
+
+.category-item span {
+  flex-grow: 1;
+}
+
+.delete-category {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 5px;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+  box-shadow: none;
+}
+
+.delete-category:hover {
+  opacity: 1;
+  box-shadow: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+#data-container {
+  padding: 20px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.category-group {
+  margin-bottom: 20px;
+  background-color: var(--input-bg);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: var(--input-bg);
+  border-bottom: 1px solid var(--button-border);
+}
+
+.category-header i {
+  margin-right: 12px;
+  font-size: 18px;
+}
+
+.category-name {
+  flex-grow: 1;
+  font-weight: 500;
+}
+
+.category-total {
+  font-weight: 600;
+}
+
+.category-entries {
+  padding: 8px 16px;
+}
+
+.entry-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--button-border);
+}
+
+.entry-row:last-child {
+  border-bottom: none;
+}
+
+.entry-date {
+  width: 100px;
+  font-size: 0.9em;
+  color: var(--text-primary);
+  opacity: 0.7;
+}
+
+.entry-desc {
+  flex-grow: 1;
+  margin: 0 16px;
+}
+
+.entry-amount {
+  font-weight: 500;
+  text-align: right;
+}
+
+.balance-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 16px;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.balance-amount {
+  margin-left: 8px;
+}
+
+.balance-amount.positive {
+  color: var(--green-bright);
+}
+
+.balance-amount.negative {
+  color: var(--pink-soft);
+}
+
+#incomes, #expenses, #savings {
+  margin-bottom: 24px;
+}
+
+.section-header {
+  margin-bottom: 16px;
+}
+
+.section-header h2 {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: var(--text-primary);
+  opacity: 0.8;
+  margin: 0;
+  padding: 0;
+}
+
+#incomes .category-header {
+  color: var(--green-bright);
+}
+
+#expenses .category-header {
+  color: var(--pink-soft);
+}
+
+#savings .category-header {
+  color: var(--orange-medium);
+}

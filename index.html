@@ -18,11 +18,41 @@
         <section id="main-menu">
             <div class="up-nav"></div>
             <div class="content">
-                <button class="nav-btn big-nav color-blue-medium" data-target="savings-forecast">Forecast</button>
-                <button class="nav-btn big-nav color-purple-light" data-target="budget-table">Budget</button>
-                <button class="nav-btn big-nav color-purple-medium" data-target="options">Options</button>
+                <div class="nav-group">
+                    <div class="up-nav">
+                    <button class="nav-btn little-nav color-blue-medium" data-target="budget-table">Table</button>
+                    <div class="placeholder-button"></div>
+                    <button class="nav-btn little-nav color-blue-medium" data-target="categories">Category</button>
+                    </div>
+                    <div class="up-nav">
+                    <button class="nav-btn little-nav color-pink-bright" data-target="budget-timeline">Timeline</button>
+                    <div class="placeholder-button"></div>
+                    <button class="nav-btn little-nav color-pink-bright" data-target="savings-forecast">Forecast</button>
+                    </div>
+                    <div class="up-nav">
+                    <button class="nav-btn little-nav color-pink-vibrant" data-target="budget-pie">Pie</button>
+                    <div class="placeholder-button"></div>
+                    <button class="nav-btn little-nav color-pink-vibrant" data-target="reports">Reports</button>
+                    </div>
+                </div>
+                <!-- Utility Buttons -->
+                <div class="utility-group">
+                    <div class="up-nav">
+                    <button id="import-btn" class="little-nav color-orange-light">Import</button>
+                    <div class="placeholder-button"></div>
+                    <button id="export-btn" class="little-nav color-orange-light">Export</button>
+                    </div>
+                    <div class="up-nav">
+                    <button id="null-btn" class="little-nav color-orange-dark">Null</button>
+                    <div class="placeholder-button"></div>
+                    <button id="dark-mode-btn" class="little-nav color-orange-dark">Dark</button>
+                    </div>
+                </div>
             </div>
-            <div class="down-nav"></div>
+            <div class="down-nav">
+                <div class="placeholder-button"></div>
+                <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
+            </div>
         </section>
 
         <!-- Savings Forecasts Screen -->
@@ -72,81 +102,70 @@
             </div>
 
             <div class="down-nav">
-                <button class="nav-btn little-nav color-blue-light" data-target="reports">Report</button>
-                <button class="nav-btn little-nav color-blue-light" data-target="main-menu">Home</button>
+                <button class="nav-btn little-nav" data-target="reports">Report</button>
+                <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
             </div>
         </section>
 
         <!-- Reports Screen -->
         <section id="reports">
             <div class="up-nav">
-                <button class="nav-btn little-nav color-teal" data-target="budget-table">Table</button>
-                <button class="nav-btn little-nav color-teal" data-target="budget-graph">Graph</button>
-                <button class="nav-btn little-nav color-teal" data-target="savings-forecast">Forecast</button>
+                <button class="nav-btn little-nav" data-target="budget-timeline">Timeline</button>
+                <button class="nav-btn little-nav" data-target="budget-pie">Pie</button>
+                <button class="nav-btn little-nav" data-target="budget-table">Table</button>
+            </div>
+            <div class="up-nav-reports">
+                <button class="nav-btn little-nav" data-target="savings-forecast">Forecast</button>
             </div>
             <!-- Reports content -->
             <div id="report-preview" class="content">
-                <div class="placeholder"></div>
+                <div class="placeholder table-placeholder"></div>
                 <!-- PDF report preview will be dynamically generated here -->
             </div>
             <div class="down-nav">
-                <button class="nav-btn little-nav color-blue-light" data-target="main-menu">Home</button>
+                <div class="placeholder-button"></div>
+                <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
             </div>
         </section>
 
-        <!-- Options Screen -->
-        <section id="options">
-            <div class="up-nav"></div>
-            <div class="content">
-                <button id="import-btn" class="big-nav color-pink-bright">Import</button>
-                <button class="nav-btn big-nav color-pink-vibrant" data-target="reports">Reports</button>
-                <button id="export-btn" class="big-nav color-pink-soft">Export</button>
-                <button id="null-btn" class="big-nav ">Null</button>
-                <button id="dark-mode-btn" class="big-nav color-orange-light">Dark Mode</button>
-            </div>
-            <div class="down-nav">
-                <button class="nav-btn little-nav color-orange-light" data-target="main-menu">Home</button>
-            </div>
-        </section>
 
         <!-- Budget Table View Screen -->
         <section id="budget-table">
             <div class="up-nav">
-                <button class="nav-btn little-nav color-blue-medium" data-target="budget-graph">Graph</button>
-                <button id="toggle-btn" class="square-btn color-blue-medium"> <i class="fa-solid fa-plus"></i></button>
+                <button class="nav-btn little-nav" data-target="budget-timeline">Timeline</button>
+                <button class="nav-btn little-nav" data-target="budget-pie">Pie</button>
+                <button id="edit-btn" class="square-btn"> <i class="fa-solid fa-pen-to-square"></i></button>
+                <button id="toggle-btn" class="square-btn"> <i class="fa-solid fa-plus"></i></button>
             </div>
             <div id="add-data-container" class="content">
                 <div class="row">
-                    <button id="income-data-btn" class="little-nav color-blue-medium">Income</button>
-                    <button id="expense-data-btn" class="little-nav color-blue-medium">Expense</button>
-                    <button id="saving-data-btn" class="little-nav color-blue-medium">Saving</button>
+                    <button id="income-data-btn" class="little-nav">Income</button>
+                    <button id="expense-data-btn" class="little-nav">Expense</button>
+                    <button id="saving-data-btn" class="little-nav">Saving</button>
                 </div>
                 <div class="row">
-                    <select id="category-select" class="color-blue-medium">
-                        <option value="salary">
-                            Salary
-                        </option>
+                    <select id="category-select">
+
                     </select>
-                    <button class="nav-btn square-btn" data-target="categories">
-                        <i class="fa-solid fa-gear color-blue-medium"></i>
+                    <button id="categories-btn" class="nav-btn square-btn" data-target="categories">
+                        <i class="fa-solid fa-gear"></i>
                     </button>
                 </div>
                 <div class="row">
-                    <input id="add-desc" class="color-blue-medium" type="text" placeholder="Description">
-                    <input id="add-date" class="color-blue-medium" type="date">
+                    <input id="add-desc" type="text" placeholder="Description">
+                    <input id="add-date" type="date">
                 </div>
                 <div class="row">
-                    <input id="add-amount" class="color-blue-medium" type="number" placeholder="0">
-                    <select id="add-frequency" class="frequency-select color-blue-medium">
+                    <input id="add-amount" type="number" placeholder="0">
+                    <select id="add-frequency" class="frequency-select">
                         <option value="single">Single</option>
                         <option value="monthly">Monthly</option>
                         <option value="monthly">Yearly</option>
                     </select>
-                    <button id="add-data-btn" class="little-nav color-blue-medium">Add</button>
+                    <button id="add-data-btn" class="little-nav">Add</button>
                 </div>
             </div>
             <div id="data-container">
-                <div class="placeholder"></div>
                 <div id="incomes">
                     <div id="incomes-data-table">
                         <!-- Budget data will be dynamically populated here -->
@@ -165,8 +184,8 @@
                 <div id="balance"></div>
             </div>
             <div class="down-nav">
-                <button class="nav-btn little-nav color-purple-medium" data-target="reports">Report</button>
-                <button class="nav-btn little-nav color-purple-medium" data-target="main-menu">Home</button>
+                <button class="nav-btn little-nav" data-target="reports">Report</button>
+                <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
             </div>
         </section>
 
@@ -175,14 +194,14 @@
             <div class="up-nav"></div>
             <div id="add-category-container" class="content">
                 <div class="row">
-                    <button id="income-category-btn" class="little-nav color-blue-medium">Income</button>
-                    <button id="expense-category-btn" class="little-nav color-blue-medium">Expense</button>
-                    <button id="saving-category-btn" class="little-nav color-blue-medium">Saving</button>
+                    <button id="income-category-btn" class="little-nav">Income</button>
+                    <button id="expense-category-btn" class="little-nav">Expense</button>
+                    <button id="saving-category-btn" class="little-nav">Saving</button>
                 </div>
                 <div>
 
 
-                    <div class="row category-icons-row color-blue-medium">
+                    <div class="row category-icons-row">
                         <i class="fa-solid fa-star"></i>
                         <i class="fa-solid fa-piggy-bank"></i>
                         <i class="fa-solid fa-car"></i>
@@ -193,7 +212,7 @@
                         <i class="fa-solid fa-landmark"></i>
                         <i class="fa-solid fa-shirt"></i>
                     </div>
-                    <div class="row category-icons-row color-blue-medium">
+                    <div class="row category-icons-row">
                         <i class="fa-solid fa-stethoscope"></i>
                         <i class="fa-solid fa-wrench"></i>
                         <i class="fa-solid fa-medal"></i>
@@ -207,37 +226,53 @@
                 </div>
                 <div class="row">
                     <input id="add-category-desc" type="text" placeholder="Description">
-                    <button id="add-data-category-btn" class="little-nav color-blue-medium">Add</button>
+                    <button id="add-data-category-btn" class="little-nav">Add</button>
                 </div>
 
                 <div id="category-list">
-
+                    <div class="table-placeholder"></div>
                     <!-- Category list will be dynamically generated here -->
                 </div>
             </div>
             <div class="down-nav">
-                <button class="nav-btn little-nav color-purple-medium" data-target="budget-table">Back</button>
-                <button class="nav-btn little-nav color-purple-medium" data-target="main-menu">Home</button>
+                <button class="nav-btn little-nav" data-target="budget-table">Back</button>
+                <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
             </div>
         </section>
 
+    <!-- Budget Pie View Screen -->
+    <section id="budget-pie">
+        <div class="up-nav">
+            <button class="nav-btn little-nav" data-target="budget-timeline">Timeline</button>
+            <div class="placeholder-button"></div>
+            <button class="nav-btn little-nav" data-target="budget-table">Table</button>
+        </div>
+        <div class="content">
+            <div id="pie-visualization"></div>
+        </div>
+        <div class="down-nav">
+            <button class="nav-btn little-nav" data-target="reports">Report</button>
+            <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
+        </div>
+    </section>
 
 
+    <!-- Budget Timeline View Screen -->
+    <section id="budget-timeline">
+        <div class="up-nav">
+            <div class="placeholder-button"></div>
+            <button class="nav-btn little-nav" data-target="budget-pie">Pie</button>
+            <button class="nav-btn little-nav" data-target="budget-table">Table</button>
 
-        <!-- Budget Graph View Screen -->
-        <section id="budget-graph">
-            <div class="up-nav">
-                <button class="nav-btn little-nav color-pink-bright" data-target="budget-table">Table</button>
-            </div>
-            <div id="graph-container" class="content">
-                <div class="placeholder"></div>
-                <!-- Budget graph will be dynamically generated here -->
-            </div>
-            <div class="down-nav">
-                <button class="nav-btn little-nav color-orange-light" data-target="reports">Report</button>
-                <button class="nav-btn little-nav color-orange-light" data-target="main-menu">Home</button>
-            </div>
-        </section>
+        </div>
+        <div class="content">
+            <div id="timeline-visualization"></div>
+        </div>
+        <div class="down-nav">
+            <button class="nav-btn little-nav" data-target="reports">Report</button>
+            <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
+        </div>
+    </section>
 
 
 

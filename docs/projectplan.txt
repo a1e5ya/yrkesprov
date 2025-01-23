@@ -6,23 +6,21 @@ Initial version will be client-side only
 
 2. Technology Stack
 
-Frontend: HTML5, CSS3, Bootstrap 5
-JavaScript Libraries/Frameworks: Bootstrap, Chart.js
+Frontend: HTML5, CSS3
+JavaScript Libraries/Frameworks: Chart.js
 
 3. Project Structure
 
 Detailed file and folder structure:
 
-package.json
-package-lock.json
+
 yrkesprov/
 │
 ├── index.html          # Main application entry point
 ├── css/
 │   ├── styles.css      # Main stylesheet
 │   └── responsive.css  # Responsive design overrides
-│
-├── js/
+│├── js/
 │   ├── script.js       # Main application logic
 │   ├── modules/
 │   │   ├── income.js   # Income-related functions
@@ -34,15 +32,13 @@ yrkesprov/
 │       └── validation.js # Input validation helpers
 │
 └── docs/               # Project documentation
-node_modules/
-
 
 
 3.1 Screen Structure Overview
 3.1.1 Main Menu Screen
 
-Central navigation hub
-Buttons: Forecast, Budget, Options
+Central navigation hub, entrance point
+Buttons: Table, timeline, pie, category, forecast, reports, import, export, null, dark
 
 3.1.2 Savings Forecasts Screen
 
@@ -55,22 +51,20 @@ Graphical forecast visualization comparing saving with/without interest
 Generate and view financial reports and visualizations
 PDF report generation section with preview
 
-3.1.4 Options Screen
-
-Application settings and preferences
-Buttons: Import, Reports, Export, Null
-Dark Mode / Light Mode toggle
-
-3.1.5 Budget Table View Screen
+3.1.4  Budget Table View Screen
 
 Shows budget information
 Function to add data
 
-3.1.6 Categories Management Screen
+3.1.5 Categories Management Screen
 
 Allows managing budget categories
 
-3.1.7 Budget Graph View Screen
+3.1.6 Budget Timeline View Screen
+
+Graphical view of budget data
+
+3.1.7 Budget Pie View Screen
 
 Graphical view of budget data
 
@@ -129,3 +123,5 @@ Unit, integration, UI/UX, and performance testing
 Input sanitization
 Client-side encryption
 Avoiding long-term storage of sensitive data
+
+14. Presentation
