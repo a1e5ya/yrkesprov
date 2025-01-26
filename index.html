@@ -112,9 +112,6 @@
             <div class="up-nav">
                 <button class="nav-btn little-nav" data-target="budget-timeline">Timeline</button>
                 <button class="nav-btn little-nav" data-target="budget-pie">Pie</button>
-                <button class="nav-btn little-nav" data-target="budget-table">Table</button>
-            </div>
-            <div class="up-nav-reports">
                 <button class="nav-btn little-nav" data-target="savings-forecast">Forecast</button>
             </div>
             <!-- Reports content -->
@@ -155,12 +152,12 @@
                     <input id="add-desc" type="text" placeholder="Description">
                     <input id="add-date" type="date">
                 </div>
-                <div class="row">
+                <div class="row" id="number-frequency-add">
                     <input id="add-amount" type="number" placeholder="0">
                     <select id="add-frequency" class="frequency-select">
                         <option value="single">Single</option>
                         <option value="monthly">Monthly</option>
-                        <option value="monthly">Yearly</option>
+                        <option value="yearly">Yearly</option>
                     </select>
                     <button id="add-data-btn" class="little-nav">Add</button>
                 </div>
@@ -181,10 +178,22 @@
                         <!-- Budget data will be dynamically populated here -->
                     </div>
                 </div>
-                <div id="balance"></div>
+                <div class="date-selector">
+                    <select id="table-date-type" class="little-nav">
+                      <option value="all">All Time</option>
+                      <option value="year">Year</option>
+                      <option value="month">Month</option>
+                      <option value="day">Day</option>
+                    </select>
+                    <input type="date" id="table-date-value" class="little-nav">
+                  </div>
+                <div id="balance">
+
+                    
+                </div>
             </div>
             <div class="down-nav">
-                <button class="nav-btn little-nav" data-target="reports">Report</button>
+                <div class="placeholder-button"></div>                
                 <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
             </div>
         </section>
@@ -248,7 +257,19 @@
             <button class="nav-btn little-nav" data-target="budget-table">Table</button>
         </div>
         <div class="content">
-            <div id="pie-visualization"></div>
+            <div class="date-selector">
+                <select id="pie-date-type" class="little-nav">
+                  <option value="all">All Time</option>
+                  <option value="year">Year</option>
+                  <option value="month">Month</option>
+                  <option value="day">Day</option>
+                </select>
+                <input type="date" id="pie-date-value" class="little-nav">
+              </div>
+            <div id="pie-visualization">
+
+
+            </div>
         </div>
         <div class="down-nav">
             <button class="nav-btn little-nav" data-target="reports">Report</button>
@@ -266,6 +287,15 @@
 
         </div>
         <div class="content">
+            <div class="timeline-controls">
+                <select id="timeline-scale" class="little-nav">
+                    <option value="24">2 Years</option>
+                    <option value="36">3 Years</option>
+                    <option value="60">5 Years</option>
+                    <option value="240">20 Years</option>
+                </select>
+            </div>
+            <div class="period-balance"></div>
             <div id="timeline-visualization"></div>
         </div>
         <div class="down-nav">
@@ -279,7 +309,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <script src="https://kit.fontawesome.com/64fc752e27.js" crossorigin="anonymous"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/polyfills.umd.js"></script>
     
     <script src="js/config/constants.js"></script>
     <script src="js/modules/utils/storage.js"></script>
@@ -289,8 +320,10 @@
     <script src="js/modules/core/themeManager.js"></script>
     <script src="js/modules/budget/budgetManager.js"></script>
     <script src="js/modules/budget/categoryManager.js"></script>
+    <script src="js/modules/reports/reportManager.js"></script>
     <script src="js/modules/forecast/calculator.js"></script>
     <script src="js/modules/forecast/visualizer.js"></script>
+    <script src="js/modules/timeline/timelineVisualizer.js"></script>
     <script src="js/script.js"></script>
 
 

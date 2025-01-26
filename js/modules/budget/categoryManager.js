@@ -27,6 +27,7 @@ const CategoryManager = {
         this.loadCategories();
         this.bindEvents();
         this.displayCategories();
+        this.handleTypeSelection('income');
     },
 
     loadCategories() {

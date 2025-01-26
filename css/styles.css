@@ -561,6 +561,7 @@ display: none;
 .entry-row {
   display: flex;
   align-items: center;
+  width: 100%;
   padding: 2px 0;
 }
 
@@ -646,30 +647,25 @@ display: none;
 
 
 .entry-row.edit-mode {
-  padding: 4px 0;
   display: flex;
   align-items: center;
 }
 
 .entry-row.edit-mode input {
-  background: var(--input-bg);
-  border: 1px solid var(--button-border);
-  border-radius: 3px;
-  padding: 4px 8px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   color: var(--text-primary);
+  width: 100%;
+  height: 40px;
 }
 
 .delete-transaction {
+  color: var(--pink-soft);
   background: none;
   border: none;
-  color: var(--text-primary);
-  font-size: 20px;
   cursor: pointer;
-  padding: 0 5px;
-  opacity: 0.5;
-  transition: opacity 0.2s ease;
-  margin-left: 8px;
-  box-shadow: none;
+  font-size: 1.2em;
+  padding: 0 8px;
 }
 
 .delete-transaction:hover {
@@ -679,4 +675,183 @@ display: none;
 #edit-btn.active {
   color: var(--purple-medium);
   border-color: var(--purple-medium);
+}
+
+
+
+.date-selector {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.date-selector select, 
+.date-selector input {
+  width: auto;
+  min-width: 120px;
+}
+
+
+
+
+
+
+
+
+.timeline-controls {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.scale-selector select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+
+.period-balance {
+  text-align: center;
+  margin: 10px 0;
+  font-size: 1.2em;
+}
+
+.balance-total {
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.balance-total.positive {
+  color: var(--green-bright);
+}
+
+.balance-total.negative {
+  color: var(--pink-soft);
+}
+
+
+#report-preview button {
+margin: 5px;
+}
+
+.report-list {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+
+}
+
+.report-item {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  align-items: center;
+}
+
+
+
+
+
+#savings-data-table .entry-row {
+  flex-direction: column;
+}
+
+
+.saving-details {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+}
+
+.saving-schedule {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-primary);
+  opacity: 0.7;
+  margin: 5px 0;
+}
+
+.progress-bar {
+  width: 100%;
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.progress-segment {
+  flex: 1;
+  height: 8px;
+  background: var(--orange-medium);
+}
+
+
+
+#number-frequency-add {
+  width: 400px;
+}
+
+
+
+
+
+.reports-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  height: calc(100vh - 140px);
+  overflow-y: auto;
+}
+
+.report-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  background-color: var(--input-bg);
+  border-radius: 4px;
+}
+
+.report-preview-thumbnail {
+  width: 60px;
+  height: 85px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--button-border);
+}
+
+.preview-placeholder {
+  width: 60px;
+  height: 85px;
+  background-color: var(--button-border);
+  border-radius: 4px;
+}
+
+.report-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.report-type {
+  font-weight: 600;
+}
+
+.report-date {
+  color: var(--text-primary);
+  opacity: 0.7;
+  font-size: 0.9em;
+}
+
+.download-report {
+  text-decoration: none;
+  color: inherit;
+  padding: 8px 16px;
+  font-size: 14px;
 }

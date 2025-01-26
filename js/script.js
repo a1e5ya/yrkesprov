@@ -4,4 +4,5 @@ document.addEventListener('DOMContentLoaded', () => {
     BudgetManager.init();
     CategoryManager.init();
     ForecastVisualizer.init();
+    TimelineVisualizer.init();
  });

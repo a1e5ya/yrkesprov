@@ -209,49 +209,42 @@ const ForecastVisualizer = {
     init() {
         this.renderPieCharts();
         window.addEventListener('resize', this.renderPieCharts.bind(this));
+        document.getElementById('pie-date-type').addEventListener('change', () => this.renderPieCharts());
+        document.getElementById('pie-date-value').addEventListener('change', () => this.renderPieCharts());
     },
  
     calculateTotals() {
-        console.log('Initial BudgetManager data:', BudgetManager.data);
-        console.log('Initial CategoryManager:', CategoryManager.categories);
- 
-        const incomes = BudgetManager.data.income.reduce((acc, entry) => {
-            console.log('Processing income entry:', entry);
-            const category = CategoryManager.getCategoryDetails(entry.category, 'income');
-            console.log('Found income category:', category);
-            const name = category ? category.name : entry.category || 'Other';
-            acc[name] = (acc[name] || 0) + Number(entry.amount);
-            console.log(`Added ${entry.amount} to ${name}, new total:`, acc[name]);
-            return acc;
-        }, {});
- 
-        const expenses = BudgetManager.data.expense.reduce((acc, entry) => {
-            console.log('Processing expense entry:', entry);
-            const category = CategoryManager.getCategoryDetails(entry.category, 'expense');
-            console.log('Found expense category:', category);
-            const name = category ? category.name : entry.category || 'Other';
-            acc[name] = (acc[name] || 0) + Number(entry.amount);
-            console.log(`Added ${entry.amount} to ${name}, new total:`, acc[name]);
-            return acc;
-        }, {});
- 
-        const savings = BudgetManager.data.saving.reduce((acc, entry) => {
-            console.log('Processing saving entry:', entry);
-            const category = CategoryManager.getCategoryDetails(entry.category, 'saving');
-            console.log('Found saving category:', category);
-            const name = category ? category.name : entry.category || 'Other';
-            acc[name] = (acc[name] || 0) + Number(entry.amount);
-            console.log(`Added ${entry.amount} to ${name}, new total:`, acc[name]);
-            return acc;
-        }, {});
- 
-        const result = {
+        const dateType = document.getElementById('pie-date-type').value;
+        const dateValue = document.getElementById('pie-date-value').value;
+    
+        const incomes = BudgetManager.getEntriesForPeriod('income', dateType, dateValue)
+            .reduce((acc, entry) => {
+                const category = CategoryManager.getCategoryDetails(entry.category, 'income');
+                const name = category ? category.name : 'Other';
+                acc[name] = (acc[name] || 0) + Number(entry.amount);
+                return acc;
+            }, {});
+    
+        const expenses = BudgetManager.getEntriesForPeriod('expense', dateType, dateValue)
+            .reduce((acc, entry) => {
+                const category = CategoryManager.getCategoryDetails(entry.category, 'expense');
+                const name = category ? category.name : 'Other';
+                acc[name] = (acc[name] || 0) + Number(entry.amount);
+                return acc;
+            }, {});
+    
+        const savings = BudgetManager.getEntriesForPeriod('saving', dateType, dateValue)
+            .reduce((acc, entry) => {
+                const category = CategoryManager.getCategoryDetails(entry.category, 'saving');
+                const name = category ? category.name : 'Other';
+                acc[name] = (acc[name] || 0) + Number(entry.amount);
+                return acc;
+            }, {});
+    
+        return {
             incomes,
             outflows: { ...expenses, ...savings }
         };
- 
-        console.log('Final calculated totals:', result);
-        return result;
     },
  
     renderPieCharts() {
@@ -390,4 +383,15 @@ document.addEventListener('DOMContentLoaded', () => {
     CategoryManager.init();
     PieChartVisualizer.init();
 });
+
+
+
+
+
+
+
+
+
+
+
 
