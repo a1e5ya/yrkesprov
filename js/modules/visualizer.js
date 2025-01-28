@@ -209,38 +209,38 @@ const ForecastVisualizer = {
     init() {
         this.renderPieCharts();
         window.addEventListener('resize', this.renderPieCharts.bind(this));
-        document.getElementById('pie-date-type').addEventListener('change', () => this.renderPieCharts());
-        document.getElementById('pie-date-value').addEventListener('change', () => this.renderPieCharts());
+        document.addEventListener('budgetUpdated', () => this.renderPieCharts());
     },
  
     calculateTotals() {
-        const dateType = document.getElementById('pie-date-type').value;
-        const dateValue = document.getElementById('pie-date-value').value;
-    
-        const incomes = BudgetManager.getEntriesForPeriod('income', dateType, dateValue)
+        // Use current date + 1 year as default period
+        const endDate = new Date();
+        endDate.setFullYear(endDate.getFullYear() + 1);
+
+        const incomes = BudgetManager.getEntriesForPeriod('income', 'all', endDate.toISOString(), true)
             .reduce((acc, entry) => {
                 const category = CategoryManager.getCategoryDetails(entry.category, 'income');
                 const name = category ? category.name : 'Other';
                 acc[name] = (acc[name] || 0) + Number(entry.amount);
                 return acc;
             }, {});
-    
-        const expenses = BudgetManager.getEntriesForPeriod('expense', dateType, dateValue)
+
+        const expenses = BudgetManager.getEntriesForPeriod('expense', 'all', endDate.toISOString(), true)
             .reduce((acc, entry) => {
                 const category = CategoryManager.getCategoryDetails(entry.category, 'expense');
                 const name = category ? category.name : 'Other';
                 acc[name] = (acc[name] || 0) + Number(entry.amount);
                 return acc;
             }, {});
-    
-        const savings = BudgetManager.getEntriesForPeriod('saving', dateType, dateValue)
+
+        const savings = BudgetManager.getEntriesForPeriod('saving', 'all', endDate.toISOString(), true)
             .reduce((acc, entry) => {
                 const category = CategoryManager.getCategoryDetails(entry.category, 'saving');
                 const name = category ? category.name : 'Other';
                 acc[name] = (acc[name] || 0) + Number(entry.amount);
                 return acc;
             }, {});
-    
+
         return {
             incomes,
             outflows: { ...expenses, ...savings }
@@ -272,28 +272,21 @@ const ForecastVisualizer = {
         const svg = d3.select(selector)
             .append('svg')
             .attr('width', width)
-            .attr('height', height + 120)  // Increased height for spacing
+            .attr('height', height + 120)
             .append('g')
-            .attr('transform', `translate(${width / 2},${height / 2 + 60})`);  // Adjusted transform
+            .attr('transform', `translate(${width / 2},${height / 2 + 60})`);
     
         svg.append('text')
             .attr('x', 0)
-            .attr('y', -height / 2 - 20)  // More space above title
+            .attr('y', -radius - 20)
             .attr('text-anchor', 'middle')
             .attr('class', 'chart-title')
             .style('font-size', '18px')
             .style('fill', 'var(--text-primary)')
             .text(title);
     
+        // Calculate total here where it's needed
         const total = d3.sum(Object.values(data));
-        svg.append('text')
-            .attr('x', 0)
-            .attr('y', height / 2 + 40)  // Space after title
-            .attr('text-anchor', 'middle')
-            .style('fill', 'var(--text-primary)')
-            .style('margin-bottom', '40px')
-            .style('font-size', '14px')
-            .text(`Total: ${total} €`);
     
         const colorScale = d3.scaleOrdinal()
             .domain(Object.keys(data))
@@ -315,7 +308,7 @@ const ForecastVisualizer = {
             .outerRadius(radius - 30);
     
         const labelArc = d3.arc()
-            .innerRadius(radius - 10) // Position labels closer to the edge
+            .innerRadius(radius - 10)
             .outerRadius(radius - 10);
     
         const arcs = svg.selectAll('arc')
@@ -331,45 +324,77 @@ const ForecastVisualizer = {
             .style('stroke-width', '2px');
     
         // Add labels
-// Add labels with background rectangles
-arcs.append('g')
-    .each(function (d) {
-        const group = d3.select(this);
-
-        // Calculate centroid for positioning
-        const [x, y] = labelArc.centroid(d);
-
-        // Create text to measure dimensions
-        const tempText = group.append('text')
-            .attr('transform', `translate(${x},${y})`)
-            .attr('text-anchor', 'middle')
-            .style('font-size', '11px')
-            .text(() => {
-                const percentage = ((d.data[1] / total) * 100).toFixed(1);
-                return `${d.data[0]} ${percentage}%`;
-            });
-
-        // Measure text dimensions
-        const textBBox = tempText.node().getBBox();
-
-        // Add rectangle as background
-        group.insert('rect', 'text')
-            .attr('x', x - textBBox.width / 2 - 6) // Add padding
-            .attr('y', y - textBBox.height / 2 - 8) // Add padding
-            .attr('width', textBBox.width + 12) // Add padding
-            .attr('height', textBBox.height + 8) // Add padding
-
-            .style('fill', 'var(--bg-primary)')
-            ;
-
-        // Reapply text attributes to ensure it's on top
-        tempText
-            .attr('transform', `translate(${x},${y})`)
-            .attr('text-anchor', 'middle')
-            .style('fill', 'var(--text-primary)')
-            .style('font-size', '11px');
-    });
-
+        const labelRadius = radius - 10;
+        const minAngleDiff = 0.3;
+        const minLabelHeight = 20;
+    
+        // Calculate label positions and detect overlaps
+        const labelData = pie(Object.entries(data)).map(d => {
+            const angle = (d.startAngle + d.endAngle) / 2;
+            const percentage = ((d.data[1] / total) * 100).toFixed(1);
+            const basePos = [
+                Math.cos(angle - Math.PI / 2) * labelRadius,
+                Math.sin(angle - Math.PI / 2) * labelRadius
+            ];
+    
+            return {
+                angle,
+                percentage,
+                text: `${d.data[0]} ${percentage}%`,
+                basePos,
+                pos: [...basePos],
+                slice: d
+            };
+        });
+    
+        // Sort labels by vertical position to handle overlaps
+        labelData.sort((a, b) => a.pos[1] - b.pos[1]);
+    
+        // Adjust positions to avoid overlaps
+        for (let i = 1; i < labelData.length; i++) {
+            const prev = labelData[i - 1];
+            const curr = labelData[i];
+    
+            if (Math.abs(curr.pos[1] - prev.pos[1]) < minLabelHeight) {
+                if (curr.pos[0] > 0) {
+                    curr.pos[0] += 20;
+                } else {
+                    curr.pos[0] -= 20;
+                }
+                curr.pos[1] = prev.pos[1] + minLabelHeight;
+            }
+        }
+    
+        // Add labels with connecting lines
+        labelData.forEach(label => {
+            const group = svg.append('g');
+    
+            const tempText = group.append('text')
+                .attr('x', label.pos[0])
+                .attr('y', label.pos[1])
+                .attr('text-anchor', label.pos[0] > 0 ? 'start' : 'end')
+                .style('font-size', '11px')
+                .text(label.text);
+    
+            const bbox = tempText.node().getBBox();
+            tempText.remove();
+    
+            group.append('rect')
+                .attr('x', label.pos[0] + (label.pos[0] > 0 ? -2 : -bbox.width - 2))
+                .attr('y', label.pos[1] - bbox.height + 2)
+                .attr('width', bbox.width + 4)
+                .attr('height', bbox.height + 2)
+                .attr('fill', 'var(--bg-primary)')
+                .attr('rx', 2);
+    
+            group.append('text')
+                .attr('x', label.pos[0])
+                .attr('y', label.pos[1])
+                .attr('text-anchor', label.pos[0] > 0 ? 'start' : 'end')
+                .style('fill', 'var(--text-primary)')
+                .style('font-size', '11px')
+                .text(label.text);
+        });
     }
     
  };

@@ -14,29 +14,25 @@ JavaScript Libraries/Frameworks: Chart.js
 Detailed file and folder structure:
 
 
-yrkesprov/
-│
-├── index.html                 # Application entry point
 ├── css/
 │   └── styles.css            # Main stylesheet with theme support
 ├── js/
-│   ├── script.js             # Application initialization
-│   ├── constants.js          # Global constants and enums
-│   ├── managers/
-│   │   ├── budgetManager.js  # Budget data operations
-│   │   ├── categoryManager.js # Category management
-│   │   ├── themeManager.js   # Theme switching logic
-│   │   ├── storageManager.js # Local storage interface
-│   │   └── navigation.js     # Screen navigation
-│   ├── components/
-│   │   ├── calculator.js     # Forecast calculations
-│   │   ├── visualizer.js     # D3.js visualizations
-│   │   └── transactionManager.js # Transaction handling
-│   └── utils/
-│       ├── formatter.js      # Data formatting
-│       └── validator.js      # Input validation
-│
-└── docs/               # Project documentation
+│   ├── config/
+│   │   └── constants.js      # Global constants and configurations
+│   ├── modules/
+│   │   ├── budgetManager.js  # Transaction management
+│   │   ├── categoryManager.js # Category operations
+│   │   ├── calculator.js     # Financial calculations
+│   │   ├── formatter.js      # Data formatting utilities
+│   │   ├── navigation.js     # Screen navigation
+│   │   ├── reportManager.js  # Report generation
+│   │   ├── storage.js        # Local storage interface
+│   │   ├── themeManager.js   # Theme management
+│   │   ├── timelineVisualizer.js # Timeline visualization
+│   │   ├── validator.js      # Input validation
+│   │   └── visualizer.js     # Charts and visualizations
+│   └── script.js             # Main application initialization
+└── index.html                # Main HTML structure
 
 
 3.1 Screen Structure Overview

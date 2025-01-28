@@ -20,12 +20,17 @@ const TimelineVisualizer = {
     },
     
     updatePeriodBalance(data) {
-        const totalBalance = data.reduce((sum, d) => sum + d.balance, 0);
+        // Calculate true period balance from the budget manager
+        const scaleSelect = document.getElementById('timeline-scale');
+        const years = parseInt(scaleSelect.value) / 12; // Convert months to years
+        
+        const totalBalance = BudgetManager.calculateMultiYearBalance(years);
+        
         const formattedBalance = totalBalance >= 0 ? 
             `+${Formatter.currency(totalBalance)}` : 
             Formatter.currency(totalBalance);
         
-        document.querySelector('.period-balance').innerHTML = `
+        document.querySelector('#budget-timeline .period-balance').innerHTML = `
             <div class="balance-total ${totalBalance >= 0 ? 'positive' : 'negative'}">
                 ${formattedBalance}
             </div>
@@ -223,18 +228,21 @@ const TimelineVisualizer = {
             .attr("fill", "var(--orange-medium)");
 
         // Balance values
-        svg.selectAll(".balance-text")
-            .data(monthlyData)
-            .enter()
-            .append("text")
-            .attr("x", centerX + 10)
-            .attr("y", d => yScale(d.date) + 4)
-            .attr("text-anchor", "start")
-            .style("fill", d => (d.balance || 0) >= 0 ? "var(--green-bright)" : "var(--pink-soft)")
-            .text(d => {
-                const balance = d.balance || 0;
-                return balance === 0 ? "0" : balance > 0 ? `+${balance}` : balance;
-            });
+
+svg.selectAll(".balance-text")
+    .data(monthlyData)
+    .enter()
+    .append("text")
+    .attr("x", centerX + 10)
+    .attr("y", d => yScale(d.date) + 4)
+    .attr("text-anchor", "start")
+    .style("fill", d => (d.balance || 0) >= 0 ? "var(--green-bright)" : "var(--pink-soft)")
+    .text(d => {
+        const balance = d.balance || 0;
+        return balance === 0 ? "0,00" : balance > 0 ? 
+            `+${Formatter.currency(balance)}` : 
+            Formatter.currency(balance);
+    });
 
         // Labels
         svg.append("text")

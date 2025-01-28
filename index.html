@@ -1,51 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Budget Tool MVP</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-
-<body>
-
-
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Budget Tool MVP</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/styles.css">
+    </head>
+    <body>
         <!-- Main Menu Screen -->
         <section id="main-menu">
             <div class="up-nav"></div>
             <div class="content">
                 <div class="nav-group">
                     <div class="up-nav">
-                    <button class="nav-btn little-nav color-blue-medium" data-target="budget-table">Table</button>
-                    <div class="placeholder-button"></div>
-                    <button class="nav-btn little-nav color-blue-medium" data-target="categories">Category</button>
+                        <button class="nav-btn little-nav color-blue-medium" data-target="budget-table">Table</button>
+                        <div class="placeholder-button"></div>
+                        <button class="nav-btn little-nav color-blue-medium" data-target="categories">Category</button>
                     </div>
                     <div class="up-nav">
-                    <button class="nav-btn little-nav color-pink-bright" data-target="budget-timeline">Timeline</button>
-                    <div class="placeholder-button"></div>
-                    <button class="nav-btn little-nav color-pink-bright" data-target="savings-forecast">Forecast</button>
+                        <button class="nav-btn little-nav color-pink-bright" data-target="budget-timeline">Timeline</button>
+                        <div class="placeholder-button"></div>
+                        <button class="nav-btn little-nav color-pink-bright" data-target="savings-forecast">Forecast</button>
                     </div>
                     <div class="up-nav">
-                    <button class="nav-btn little-nav color-pink-vibrant" data-target="budget-pie">Pie</button>
-                    <div class="placeholder-button"></div>
-                    <button class="nav-btn little-nav color-pink-vibrant" data-target="reports">Reports</button>
+                        <button class="nav-btn little-nav color-pink-vibrant" data-target="budget-pie">Pie</button>
+                        <div class="placeholder-button"></div>
+                        <button class="nav-btn little-nav color-pink-vibrant" data-target="reports">Reports</button>
                     </div>
                 </div>
                 <!-- Utility Buttons -->
                 <div class="utility-group">
                     <div class="up-nav">
-                    <button id="import-btn" class="little-nav color-orange-light">Import</button>
-                    <div class="placeholder-button"></div>
-                    <button id="export-btn" class="little-nav color-orange-light">Export</button>
+                        <button id="import-btn" class="little-nav color-orange-light">Import</button>
+                        <div class="placeholder-button"></div>
+                        <button id="export-btn" class="little-nav color-orange-light">Export</button>
                     </div>
                     <div class="up-nav">
-                    <button id="null-btn" class="little-nav color-orange-dark">Null</button>
-                    <div class="placeholder-button"></div>
-                    <button id="dark-mode-btn" class="little-nav color-orange-dark">Dark</button>
+                        <button id="null-btn" class="little-nav color-orange-dark">Null</button>
+                        <div class="placeholder-button"></div>
+                        <button id="dark-mode-btn" class="little-nav color-orange-dark">Dark</button>
                     </div>
                 </div>
             </div>
@@ -54,7 +50,6 @@
                 <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
             </div>
         </section>
-
         <!-- Savings Forecasts Screen -->
         <section id="savings-forecast">
             <div class="up-nav"></div>
@@ -64,49 +59,65 @@
                     <div class="forecast-input-group">
                         <div class="row">
                             <label for="forecast-initial">Initial Investment</label>
-                            <input type="number" id="forecast-initial" class="forecast-input" value="100"> €
+                            <input
+                                type="number"
+                                id="forecast-initial"
+                                class="forecast-input"
+                                value="100"
+                            >
+                            €
                         </div>
                         <div class="row">
                             <div id="forecast-initial-container" class="forecast-slider"></div>
                         </div>
                     </div>
-
                     <div class="forecast-input-group">
                         <div class="row">
                             <label for="forecast-rate">Annual Interest Rate</label>
-                            <input type="number" id="forecast-rate" class="forecast-input" value="5" step="0.1"> %
+                            <input
+                                type="number"
+                                id="forecast-rate"
+                                class="forecast-input"
+                                value="5"
+                                step="0.1"
+                            >
+                            %
                         </div>
                         <div class="row">
                             <div id="forecast-rate-container" class="forecast-slider"></div>
                         </div>
                     </div>
-
                     <div class="forecast-input-group">
                         <div class="row">
                             <label for="forecast-years">Investment Period</label>
-                            <input type="number" id="forecast-years" class="forecast-input" value="10"> Years
+                            <input
+                                type="number"
+                                id="forecast-years"
+                                class="forecast-input"
+                                value="10"
+                            >
+                            Years
                         </div>
                         <div class="row">
                             <div id="forecast-years-container" class="forecast-slider"></div>
                         </div>
                     </div>
-
                 </div>
-
                 <div class="forecast-results">
-                    <div>With Simple Interest: <span id="forecast-simple">0 €</span></div>
-                    <div>With Compound Interest: <span id="forecast-compound">0 €</span></div>
+                    <div>With Simple Interest:
+                        <span id="forecast-simple">0 €</span>
+                    </div>
+                    <div>With Compound Interest:
+                        <span id="forecast-compound">0 €</span>
+                    </div>
                 </div>
-
-                <div id="forecast-chart"></div>
+                <div id="forecast-chart" style="width: 500px; height: 300px;"></div>
             </div>
-
             <div class="down-nav">
                 <button class="nav-btn little-nav" data-target="reports">Report</button>
                 <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
             </div>
         </section>
-
         <!-- Reports Screen -->
         <section id="reports">
             <div class="up-nav">
@@ -124,15 +135,17 @@
                 <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
             </div>
         </section>
-
-
         <!-- Budget Table View Screen -->
         <section id="budget-table">
             <div class="up-nav">
                 <button class="nav-btn little-nav" data-target="budget-timeline">Timeline</button>
                 <button class="nav-btn little-nav" data-target="budget-pie">Pie</button>
-                <button id="edit-btn" class="square-btn"> <i class="fa-solid fa-pen-to-square"></i></button>
-                <button id="toggle-btn" class="square-btn"> <i class="fa-solid fa-plus"></i></button>
+                <button id="edit-btn" class="square-btn">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button id="toggle-btn" class="square-btn">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
             </div>
             <div id="add-data-container" class="content">
                 <div class="row">
@@ -141,9 +154,7 @@
                     <button id="saving-data-btn" class="little-nav">Saving</button>
                 </div>
                 <div class="row">
-                    <select id="category-select">
-
-                    </select>
+                    <select id="category-select"></select>
                     <button id="categories-btn" class="nav-btn square-btn" data-target="categories">
                         <i class="fa-solid fa-gear"></i>
                     </button>
@@ -165,39 +176,36 @@
             <div id="data-container">
                 <div id="incomes">
                     <div id="incomes-data-table">
-                        <!-- Budget data will be dynamically populated here -->
-                    </div>
+                        <!-- Budget data will be dynamically populated here --></div>
                 </div>
                 <div id="expenses">
                     <div id="expenses-data-table">
-                        <!-- Budget data will be dynamically populated here -->
-                    </div>
+                        <!-- Budget data will be dynamically populated here --></div>
                 </div>
                 <div id="savings">
                     <div id="savings-data-table">
-                        <!-- Budget data will be dynamically populated here -->
-                    </div>
+                        <!-- Budget data will be dynamically populated here --></div>
                 </div>
-                <div class="date-selector">
-                    <select id="table-date-type" class="little-nav">
-                      <option value="all">All Time</option>
-                      <option value="year">Year</option>
-                      <option value="month">Month</option>
-                      <option value="day">Day</option>
-                    </select>
-                    <input type="date" id="table-date-value" class="little-nav">
-                  </div>
-                <div id="balance">
-
-                    
+                <div class="row">
+                    <span>Balance after</span>
+                    <div class="timeline-controls">                    
+                        <select id="table-balance">       
+                            <option value="12">1 year</option>                    
+                            <option value="24">2 years</option>
+                            <option value="36">3 years</option>
+                            <option value="60">5 years</option>
+                            <option value="240">20 years</option>
+                        </select>              
+                        </div>                 
+                       <span>=</span>
+                    <div class="period-balance"></div>
                 </div>
             </div>
             <div class="down-nav">
-                <div class="placeholder-button"></div>                
+                <div class="placeholder-button"></div>
                 <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
             </div>
         </section>
-
         <!-- Categories Management Screen -->
         <section id="categories">
             <div class="up-nav"></div>
@@ -208,8 +216,6 @@
                     <button id="saving-category-btn" class="little-nav">Saving</button>
                 </div>
                 <div>
-
-
                     <div class="row category-icons-row">
                         <i class="fa-solid fa-star"></i>
                         <i class="fa-solid fa-piggy-bank"></i>
@@ -237,7 +243,6 @@
                     <input id="add-category-desc" type="text" placeholder="Description">
                     <button id="add-data-category-btn" class="little-nav">Add</button>
                 </div>
-
                 <div id="category-list">
                     <div class="table-placeholder"></div>
                     <!-- Category list will be dynamically generated here -->
@@ -248,54 +253,44 @@
                 <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
             </div>
         </section>
-
-    <!-- Budget Pie View Screen -->
-    <section id="budget-pie">
-        <div class="up-nav">
-            <button class="nav-btn little-nav" data-target="budget-timeline">Timeline</button>
-            <div class="placeholder-button"></div>
-            <button class="nav-btn little-nav" data-target="budget-table">Table</button>
-        </div>
-        <div class="content">
-            <div class="date-selector">
-                <select id="pie-date-type" class="little-nav">
-                  <option value="all">All Time</option>
-                  <option value="year">Year</option>
-                  <option value="month">Month</option>
-                  <option value="day">Day</option>
-                </select>
-                <input type="date" id="pie-date-value" class="little-nav">
-              </div>
-            <div id="pie-visualization">
-
-
+        <!-- Budget Pie View Screen -->
+        <section id="budget-pie">
+            <div class="up-nav">
+                <button class="nav-btn little-nav" data-target="budget-timeline">Timeline</button>
+                <div class="placeholder-button"></div>
+                <button class="nav-btn little-nav" data-target="budget-table">Table</button>
             </div>
+            <div class="content">
+                
+            <div id="pie-visualization"></div>
         </div>
         <div class="down-nav">
             <button class="nav-btn little-nav" data-target="reports">Report</button>
             <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
         </div>
     </section>
-
-
     <!-- Budget Timeline View Screen -->
     <section id="budget-timeline">
         <div class="up-nav">
             <div class="placeholder-button"></div>
             <button class="nav-btn little-nav" data-target="budget-pie">Pie</button>
             <button class="nav-btn little-nav" data-target="budget-table">Table</button>
-
         </div>
         <div class="content">
-            <div class="timeline-controls">
-                <select id="timeline-scale" class="little-nav">
-                    <option value="24">2 Years</option>
-                    <option value="36">3 Years</option>
-                    <option value="60">5 Years</option>
-                    <option value="240">20 Years</option>
-                </select>
+            <div class="row">
+                <span>Balance after</span>
+                <div class="timeline-controls">
+                    <select id="timeline-scale">
+                        <option value="12">1 year</option>                    
+                        <option value="24">2 years</option>
+                        <option value="36">3 years</option>
+                        <option value="60">5 years</option>
+                        <option value="240">20 years</option>
+                    </select>
+                </div>
+                <span>=</span>
+                <div class="period-balance"></div>
             </div>
-            <div class="period-balance"></div>
             <div id="timeline-visualization"></div>
         </div>
         <div class="down-nav">
@@ -303,30 +298,26 @@
             <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
         </div>
     </section>
-
-
-
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
     <script src="https://kit.fontawesome.com/64fc752e27.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/polyfills.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <script src="js/config/constants.js"></script>
-    <script src="js/modules/utils/storage.js"></script>
-    <script src="js/modules/utils/validation.js"></script>
-    <script src="js/modules/utils/formatter.js"></script>
-    <script src="js/modules/core/navigation.js"></script>
-    <script src="js/modules/core/themeManager.js"></script>
-    <script src="js/modules/budget/budgetManager.js"></script>
-    <script src="js/modules/budget/categoryManager.js"></script>
-    <script src="js/modules/reports/reportManager.js"></script>
-    <script src="js/modules/forecast/calculator.js"></script>
-    <script src="js/modules/forecast/visualizer.js"></script>
-    <script src="js/modules/timeline/timelineVisualizer.js"></script>
+    <script src="js/modules/storage.js"></script>
+    <script src="js/modules/validation.js"></script>
+    <script src="js/modules/formatter.js"></script>
+    <script src="js/modules/navigation.js"></script>
+    <script src="js/modules/themeManager.js"></script>
+    <script src="js/modules/budgetManager.js"></script>
+    <script src="js/modules/categoryManager.js"></script>
+    <script src="js/modules/reportManager.js"></script>
+    <script src="js/modules/calculator.js"></script>
+    <script src="js/modules/visualizer.js"></script>
+    <script src="js/modules/timelineVisualizer.js"></script>
+    <script src="js/modules/exportManager.js"></script>
+    <script src="js/modules/importManager.js"></script>
     <script src="js/script.js"></script>
-
-
 </body>
-
 </html>

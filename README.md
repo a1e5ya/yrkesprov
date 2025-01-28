@@ -1,29 +1,88 @@
-# yrkesprov
-
-
 # Budget Management Tool
 
-A web-based personal finance management application focused on budget tracking and savings forecasting.
+A comprehensive web-based personal finance management application focused on budget tracking, visualization, and financial forecasting.
 
-## Current Features
+## Features
 
-- **Navigation System**: Smooth transitions between different application screens
+### Core Functionality
+- **Transaction Management**
+  - Add, edit, and delete transactions
+  - Support for income, expenses, and savings
+  - Recurring transaction support (monthly/yearly)
+  - Category-based organization
+
+- **Visualization Tools**
+  - Timeline view with balance forecasting
+  - Category distribution pie charts
+  - Interactive savings calculator with compound interest
+
+- **Category Management**
+  - Custom categories with icons
+  - Separate categories for income, expenses, and savings
+  - Visual category management interface
+
+### Additional Features
 - **Theme Support**: Dark/light mode with user preference persistence
-- **Savings Calculator**:
-  - Interactive D3.js sliders for input
-  - Real-time calculation updates
-  - Visual comparison of compound vs. simple interest
-  - Customizable initial investment, interest rate, and time period
+- **Report Generation**: Generate and download PDF reports
+- **Data Management**: Local storage with data persistence
+- **Period Selection**: Filter data by day/month/year
+- **Balance Tracking**: Real-time balance calculations
 
-  ## Technologies Used
+## Technologies Used
 
-- HTML5 & CSS3 for structure and styling
-- Vanilla JavaScript for core functionality
-- D3.js for interactive visualizations
-- Font Awesome for icons
-- Google Fonts (Lexend)
+- **Core Technologies**
+  - HTML5 & CSS3 for structure and styling
+  - Vanilla JavaScript for core functionality
+  - Local Storage API for data persistence
+
+- **Libraries**
+  - D3.js for interactive visualizations
+  - jsPDF for PDF report generation
+  - Font Awesome for icons
+  - Google Fonts (Lexend)
+
+## Project Structure
+
+```
+├── css/
+│   └── styles.css            # Main stylesheet with theme support
+├── js/
+│   ├── config/
+│   │   └── constants.js      # Global constants and configurations
+│   ├── modules/
+│   │   ├── budgetManager.js  # Transaction management
+│   │   ├── categoryManager.js # Category operations
+│   │   ├── calculator.js     # Financial calculations
+│   │   ├── formatter.js      # Data formatting utilities
+│   │   ├── navigation.js     # Screen navigation
+│   │   ├── reportManager.js  # Report generation
+│   │   ├── storage.js        # Local storage interface
+│   │   ├── themeManager.js   # Theme management
+│   │   ├── timelineVisualizer.js # Timeline visualization
+│   │   ├── validator.js      # Input validation
+│   │   └── visualizer.js     # Charts and visualizations
+│   └── script.js             # Main application initialization
+└── index.html                # Main HTML structure
+
+```
+
+## Upcoming Features
+- Import/Export functionality for data backup
+- Enhanced reporting capabilities
+- Data visualization improvements
+- Testing implementation
+
+## Getting Started
+
+1. Clone the repository
+2. Open index.html in a modern web browser
+3. No build process or dependencies required
+
+## Browser Support
+
+Tested and supported in latest versions of:
+- Chrome
 
 ## Development Status
 
-This project is currently in MVP (Minimum Viable Product) development phase. Basic UI structure and core savings calculation features are implemented, with budget management features under development.
-
+This project is in active development. Core features are implemented and functional, with additional features and improvements planned.
