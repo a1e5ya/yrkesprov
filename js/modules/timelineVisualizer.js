@@ -39,6 +39,8 @@ const TimelineVisualizer = {
     
     createScaleSelector() {
         const container = document.getElementById('timeline-visualization');
+        const width = container.clientWidth - margin.left - margin.right;
+const height = Math.min(width * 0.8, 600);
         const controls = document.createElement('div');
         controls.className = 'timeline-controls';
         controls.innerHTML = `
@@ -134,9 +136,9 @@ const TimelineVisualizer = {
         
         d3.select("#timeline-visualization").select("svg").remove();
     
-        const margin = {top: 40, right: 20, bottom: 40, left: 20};
-        const width = 500 - margin.left - margin.right;
-        const height = 600 - margin.top - margin.bottom;
+        const margin = {top: 40, right: 20, bottom: 60, left: 10};
+        const width = Math.min(350, window.innerWidth - margin.left - margin.right);
+        const height = Math.min(400, window.innerHeight - margin.top - margin.bottom);
         const barWidth = width * 0.3;
     
         const svg = d3.select("#timeline-visualization")

@@ -28,7 +28,5 @@ transaction,expense,Healthcare,,Dental checkup,200,2025-07-01,yearly,
 transaction,expense,Healthcare,,Gym membership,45,2025-01-01,monthly,
 transaction,expense,Shopping,,Clothes and shoes,120,2025-01-01,monthly,
 transaction,expense,Shopping,,Winter jacket,150,2025-11-15,single,
-transaction,saving,Emergency fund,,Monthly emergency savings,200,2025-01-01,monthly,
-transaction,saving,Investment,,Monthly stock investment,300,2025-01-01,monthly,
-transaction,saving,Investment,,Year-end investment boost,1000,2025-12-20,yearly,
-transaction,saving,Vacation,,Summer vacation fund,1400,2025-06-15,single,
+transaction,saving,Investment,,Monthly investment plan,100,2025-12-31,monthly,2025-12-31
+transaction,saving,Vacation,,Summer vacation fund,1400,2025-06-15,single,2025-06-15

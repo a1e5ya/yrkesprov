@@ -29,11 +29,11 @@ const ExportManager = {
                     type,
                     category.name,
                     category.icon,
-                    '', // Description not used for categories
-                    '', // Amount not used for categories
-                    '', // Date not used for categories
-                    '', // Frequency not used for categories
-                    ''  // EndDate not used for categories
+                    '',
+                    '',
+                    '',
+                    '',
+                    ''
                 ]);
             });
         });
@@ -43,17 +43,38 @@ const ExportManager = {
             if (BudgetManager.data[type]) {
                 BudgetManager.data[type].forEach(entry => {
                     const categoryDetails = CategoryManager.getCategoryDetails(entry.category, type);
-                    rows.push([
-                        'transaction',
-                        type,
-                        categoryDetails ? categoryDetails.name : '', // Category name
-                        '', // Icon not used for transactions
-                        entry.description,
-                        entry.amount,
-                        entry.date,
-                        entry.frequency || 'single',
-                        entry.endDate || ''
-                    ]);
+                    
+                    if (type === 'saving') {
+                        // For savings, preserve the original input format
+                        const originalAmount = entry.frequency === 'monthly' ? 
+                            entry.amount : // Use monthly amount directly
+                            entry.totalAmount || entry.amount; // Use total amount for single entries
+
+                        rows.push([
+                            'transaction',
+                            type,
+                            categoryDetails ? categoryDetails.name : '',
+                            '',
+                            entry.description,
+                            originalAmount.toString(),
+                            entry.endDate, // Use target date for savings
+                            entry.originalFrequency || entry.frequency, // Use original frequency
+                            entry.endDate
+                        ]);
+                    } else {
+                        // Regular income/expense entries
+                        rows.push([
+                            'transaction',
+                            type,
+                            categoryDetails ? categoryDetails.name : '',
+                            '',
+                            entry.description,
+                            entry.amount.toString(),
+                            entry.date,
+                            entry.frequency || 'single',
+                            entry.endDate || ''
+                        ]);
+                    }
                 });
             }
         });
@@ -66,7 +87,6 @@ const ExportManager = {
             row.map(str => {
                 if (str === null || str === undefined) str = '';
                 str = String(str);
-                // Handle strings that need quotation marks
                 if (str.includes(',') || str.includes('"') || str.includes('\n')) {
                     return `"${str.replace(/"/g, '""')}"`;
                 }

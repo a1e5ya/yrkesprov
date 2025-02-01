@@ -223,39 +223,60 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
         if (type === 'saving') {
             const today = new Date();
             const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-            
             const targetDate = new Date(entryData.date);
             const targetStart = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
             
-            const timeDiff = targetStart - todayStart;
-            if (timeDiff <= 0) {
+            if (targetStart <= todayStart) {
                 return false;
             }
-        
-            const monthlyAmount = entryData.amount / Math.max(1, Math.ceil(timeDiff / (1000 * 60 * 60 * 24 * 30.44)));
-            
+    
+            // Store original frequency before any modifications
+            const originalFrequency = entryData.frequency;
+    
+            if (entryData.frequency === 'monthly') {
+                // For monthly savings, use the amount as is
+                const monthlyAmount = parseFloat(entryData.amount);
+                const timeDiff = targetStart - todayStart;
+                const monthsToTarget = Math.max(1, Math.ceil(timeDiff / (1000 * 60 * 60 * 24 * 30.44)));
+                const totalAmount = monthlyAmount * monthsToTarget;
+                
+                entryData.amount = monthlyAmount;
+                entryData.totalAmount = totalAmount;
+            } else {
+                // For single (target amount) savings
+                const totalAmount = parseFloat(entryData.amount);
+                const timeDiff = targetStart - todayStart;
+                const monthsToTarget = Math.max(1, Math.ceil(timeDiff / (1000 * 60 * 60 * 24 * 30.44)));
+                const monthlyAmount = totalAmount / monthsToTarget;
+                
+                entryData.amount = monthlyAmount;
+                entryData.totalAmount = totalAmount;
+            }
+    
             entryData.date = todayStart.toISOString().split('T')[0];
             entryData.endDate = targetStart.toISOString().split('T')[0];
-            entryData.amount = monthlyAmount;
             entryData.frequency = 'monthly';
+            entryData.originalFrequency = originalFrequency; // Store original frequency
         }
-
+    
         if (!this.validateEntry(entryData)) return false;
-
+    
         const entry = {
             id: Date.now(),
             category: entryData.category,
             description: entryData.description,
             amount: parseFloat(entryData.amount),
+            totalAmount: entryData.totalAmount,
             date: entryData.date,
             frequency: entryData.frequency || 'single',
+            originalFrequency: entryData.originalFrequency, // Include original frequency
             endDate: entryData.endDate
         };
-
+    
         if (!this.data[type]) {
             this.data[type] = [];
         }
-
+    
         this.data[type].push(entry);
         this.saveData();
         this.updateDisplay();
@@ -286,12 +307,27 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
                 btn.style.borderColor = t === type ? color : 'transparent';
             }
         });
-
+    
         const frequencySelect = document.getElementById('add-frequency');
         if (frequencySelect) {
-            frequencySelect.style.display = type === 'saving' ? 'none' : 'block';
+            if (type === 'saving') {
+                frequencySelect.style.display = 'block';
+                // Update frequency options for savings
+                frequencySelect.innerHTML = `
+                    <option value="single">Target</option>
+                    <option value="monthly">Monthly</option>
+                `;
+            } else {
+                frequencySelect.style.display = 'block';
+                // Restore original options for income/expense
+                frequencySelect.innerHTML = `
+                    <option value="single">Single</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="yearly">Yearly</option>
+                `;
+            }
         }
-
+    
         const addBtn = document.getElementById('add-data-btn');
         const categoriesBtn = document.getElementById('categories-btn');
         if (addBtn) addBtn.style.borderColor = color;
@@ -486,8 +522,20 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
                     items: []
                 };
             }
+            
+            // Calculate total based on entry type
+            let entryTotal = parseFloat(entry.amount);
+            
+            // For savings with monthly frequency and end date
+            if (entry.frequency === 'monthly' && entry.endDate) {
+                const startDate = new Date(entry.date);
+                const endDate = new Date(entry.endDate);
+                const months = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24 * 30.44));
+                entryTotal = entry.amount * months;
+            }
+            
             totals[entry.category].items.push(entry);
-            totals[entry.category].total += parseFloat(entry.amount);
+            totals[entry.category].total += entryTotal;
         });
         return totals;
     },
@@ -540,49 +588,49 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
     },
 
     createEntryHTML(entry) {
-// In budgetManager.js, find createEntryHTML method and replace the savings part (the first if block):
-
-if (entry.frequency === 'monthly' && entry.endDate) {
-    const startDate = new Date(entry.date);
-    const endDate = new Date(entry.endDate);
-    const months = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24 * 30.44));
-    const totalAmount = entry.amount * months;
-
-    return `
-        <div class="entry-row ${this.isEditMode ? 'edit-mode' : ''}" data-id="${entry.id}">
-            <div class="saving-details">
-                <span class="description">
-                    ${this.isEditMode ? 
-                        `<input type="text" class="edit-desc" value="${entry.description}" style="border: 1px solid var(--text-primary);">` :
-                        entry.description}
-                </span>
-                <span class="total-amount">
-                    ${this.isEditMode ? 
-                        `<input type="number" class="edit-total-amount" value="${totalAmount}" style="border: 1px solid var(--text-primary);">` :
-                        Formatter.currency(totalAmount)}
-                </span>
-            </div>
-            <div class="saving-schedule">
-                <span class="target-date">
-                    ${this.isEditMode ? 
-                        `<input type="date" class="edit-target-date" value="${entry.endDate}" style="border: 1px solid var(--text-primary);">` :
-                        Formatter.date(entry.endDate)}
-                </span>
-                <span class="duration">${months} months</span>
-                <span class="monthly-amount">
-                    ${this.isEditMode ? 
-                        `<input type="number" class="edit-amount" value="${entry.amount}" style="border: 1px solid var(--text-primary);">` :
-                        `${Formatter.currency(entry.amount)}/month`}
-                </span>
-            </div>
-            <div class="progress-bar">
-                ${Array(months).fill('<div class="progress-segment"></div>').join('')}
-            </div>
-            ${this.isEditMode ? '<button class="delete-transaction">×</button>' : ''}
-        </div>
-    `;
-}
-
+        if (entry.frequency === 'monthly' && entry.endDate) {
+            const startDate = new Date(entry.date);
+            const endDate = new Date(entry.endDate);
+            const months = Math.max(1, Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24 * 30.44)));
+            const totalAmount = entry.totalAmount || (entry.amount * months);
+            
+            const progressSegments = Math.min(Math.max(months, 1), 36); // Cap at 36 segments
+    
+            return `
+                <div class="entry-row ${this.isEditMode ? 'edit-mode' : ''}" data-id="${entry.id}">
+                    <div class="saving-details">
+                        <span class="description">
+                            ${this.isEditMode ? 
+                                `<input type="text" class="edit-desc" value="${entry.description}" style="border: 1px solid var(--text-primary);">` :
+                                entry.description}
+                        </span>
+                        <span class="total-amount">
+                            ${this.isEditMode ? 
+                                `<input type="number" class="edit-total-amount" value="${totalAmount}" style="border: 1px solid var(--text-primary);">` :
+                                Formatter.currency(totalAmount)}
+                        </span>
+                    </div>
+                    <div class="saving-schedule">
+                        <span class="target-date">
+                            ${this.isEditMode ? 
+                                `<input type="date" class="edit-target-date" value="${entry.endDate}" style="border: 1px solid var(--text-primary);">` :
+                                Formatter.date(entry.endDate)}
+                        </span>
+                        <span class="duration">${months} months</span>
+                        <span class="monthly-amount">
+                            ${this.isEditMode ? 
+                                `<input type="number" class="edit-amount" value="${entry.amount}" style="border: 1px solid var(--text-primary);">` :
+                                `${Formatter.currency(entry.amount)}/month`}
+                        </span>
+                    </div>
+                    <div class="progress-bar">
+                        ${Array(progressSegments).fill('<div class="progress-segment"></div>').join('')}
+                    </div>
+                    ${this.isEditMode ? '<button class="delete-transaction">×</button>' : ''}
+                </div>
+            `;
+        }
+    
         return `
             <div class="entry-row ${this.isEditMode ? 'edit-mode' : ''}" data-id="${entry.id}">
                 <div class="entry-date">

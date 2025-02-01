@@ -100,28 +100,53 @@ const ReportManager = {
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF();
         
+        // PDF page dimensions
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        
+        // Set font and calculate text widths for centering
         pdf.setFontSize(16);
-        pdf.text(`${report.type.toUpperCase()} Report`, 20, 20);
+        const titleText = `${report.type.toUpperCase()} Report`;
+        const titleWidth = pdf.getTextDimensions(titleText).w;
+        
+        // Center the title horizontally
+        pdf.text(titleText, (pageWidth - titleWidth) / 2, 30);
         
         pdf.setFontSize(12);
-        pdf.text(`Generated: ${new Date(report.timestamp).toLocaleString()}`, 20, 30);
+        const dateText = `Generated: ${new Date(report.timestamp).toLocaleString()}`;
+        const dateWidth = pdf.getTextDimensions(dateText).w;
+        pdf.text(dateText, (pageWidth - dateWidth) / 2, 40);
     
         try {
             let targetElement;
+            let balanceText = '';
             switch(report.type) {
                 case 'forecast':
                     targetElement = document.querySelector("#forecast-chart");
-                    pdf.text(`Simple Interest: ${report.data.simpleResult}`, 20, 50);
-                    pdf.text(`Compound Interest: ${report.data.compoundResult}`, 20, 60);
+                    
+                    // Centered result texts
+                    const simpleText = `Simple Interest: ${report.data.simpleResult}`;
+                    const compoundText = `Compound Interest: ${report.data.compoundResult}`;
+                    const simpleWidth = pdf.getTextDimensions(simpleText).w;
+                    const compoundWidth = pdf.getTextDimensions(compoundText).w;
+                    
+                    pdf.text(simpleText, (pageWidth - simpleWidth) / 2, 50);
+                    pdf.text(compoundText, (pageWidth - compoundWidth) / 2, 60);
                     break;
                 case 'pie':
                     targetElement = document.querySelector("#pie-visualization");
-                    pdf.text(`Balance: ${report.data.balance}`, 20, 50);
+                    balanceText = `Balance: ${report.data.balance}`;
                     break;
                 case 'timeline':
                     targetElement = document.querySelector("#timeline-visualization");
-                    pdf.text(`Balance: ${report.data.balance}`, 20, 50);
+                    balanceText = `Balance: ${report.data.balance}`;
                     break;
+            }
+
+            // Handle balance text for pie and timeline
+            if (balanceText) {
+                const balanceWidth = pdf.getTextDimensions(balanceText).w;
+                pdf.text(balanceText, (pageWidth - balanceWidth) / 2, 50);
             }
     
             if (targetElement) {
@@ -191,10 +216,13 @@ const ReportManager = {
                 const imgData = canvas.toDataURL('image/jpeg', 1.0);
                 
                 // Calculate dimensions to fit in PDF while maintaining aspect ratio
-                const pdfWidth = 170;
+                const pdfWidth = pageWidth - 40; // Almost full width of the page
                 const pdfHeight = (600 * pdfWidth) / 800;
                 
-                pdf.addImage(imgData, 'JPEG', 20, 70, pdfWidth, pdfHeight);
+                // Calculate horizontal centering
+                const xPosition = 20; // Small margin from the left
+                
+                pdf.addImage(imgData, 'JPEG', xPosition, 70, pdfWidth, pdfHeight);
     
                 // Restore original theme and display
                 document.documentElement.setAttribute('data-theme', originalTheme);
@@ -306,7 +334,7 @@ const ReportManager = {
                             <span class="report-type">${report.type}</span>
                             <span class="report-date">${new Date(report.timestamp).toLocaleString()}</span>
                         </div>
-                        <button class="download-report">Download PDF</button>
+                        <button class="download-report">PDF</button>
                         <button class="delete-report">×</button>
                     </div>
                 `).join('')}
@@ -318,6 +346,10 @@ const ReportManager = {
         document.querySelectorAll('[data-target="reports"]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const currentSection = e.target.closest('section').id;
+                
+                // Skip report generation for main menu
+                if (currentSection === 'main-menu') return;
+                
                 const type = currentSection.split('-')[1];
                 this.generateReport(type, currentSection);
             });
@@ -340,11 +372,9 @@ const ReportManager = {
                     alert('Error generating PDF. Please try again.');
                 }
             } else if (e.target.classList.contains('delete-report')) {
-                if (confirm('Delete this report?')) {
-                    this.reports = this.reports.filter(r => r.id !== reportId);
-                    this.saveReports();
-                    this.displayReports();
-                }
+                this.reports = this.reports.filter(r => r.id !== reportId);
+                this.saveReports();
+                this.displayReports();
             }
         });
     }

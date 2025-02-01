@@ -26,9 +26,9 @@ const ImportManager = {
     async handleFile(file) {
         try {
             const content = await this.readFile(file);
-            await this.importData(content);
+            const data = this.parseCSV(content);
+            await this.processImportedData(data);
             
-            // Refresh UI
             BudgetManager.updateDisplay();
             CategoryManager.displayCategories();
             CategoryManager.populateCategorySelect('income');
@@ -72,25 +72,20 @@ const ImportManager = {
         return results;
     },
 
-    async importData(csvContent) {
-        const data = this.parseCSV(csvContent);
-        
+    async processImportedData(data) {
         // Clear all existing data
         BudgetManager.data = { income: [], expense: [], saving: [] };
-        
-        // Reset categories with empty arrays
         CategoryManager.categories = {
             income: [],
             expense: [],
             saving: []
         };
-
-        // First pass: Process only categories
+    
+        // Process categories first
         const categories = data.filter(row => row.DataType === 'category');
         let nextCategoryId = 1;
         
         categories.forEach(category => {
-            // Add category with a new sequential ID
             CategoryManager.categories[category.Type].push({
                 id: nextCategoryId++,
                 name: category.Name,
@@ -99,34 +94,59 @@ const ImportManager = {
             });
         });
         
-        // Save new category structure
         CategoryManager.saveCategories();
         
-        // Second pass: Import transactions
+        // Process transactions
         const transactions = data.filter(row => row.DataType === 'transaction');
-        transactions.forEach(transaction => {
-            // Find category ID based on name
+        for (const transaction of transactions) {
             const categoryDetails = CategoryManager.categories[transaction.Type]
                 .find(cat => cat.name === transaction.Name);
                 
             if (categoryDetails) {
-                const entry = {
-                    category: categoryDetails.id,
-                    description: transaction.Description,
-                    amount: parseFloat(transaction.Amount),
-                    date: transaction.Date,
-                    frequency: transaction.Frequency,
-                    endDate: transaction.EndDate || undefined
-                };
-                
-                BudgetManager.addEntry(transaction.Type, entry);
+                if (transaction.Type === 'saving') {
+                    // Handle savings specially
+                    const entry = {
+                        category: categoryDetails.id,
+                        description: transaction.Description,
+                        amount: parseFloat(transaction.Amount),
+                        date: transaction.Date,
+                        frequency: transaction.Frequency,
+                        endDate: transaction.EndDate
+                    };
+    
+                    // For 'single' frequency (target amount), keep the total amount and target date
+                    if (transaction.Frequency === 'single') {
+                        entry.totalAmount = parseFloat(transaction.Amount);
+                        entry.date = transaction.Date;
+                    } else if (transaction.Frequency === 'monthly') {
+                        // For monthly frequency, amount is already monthly
+                        const today = new Date();
+                        const targetDate = new Date(transaction.Date);
+                        const monthsToTarget = Math.max(1, Math.ceil(
+                            (targetDate - today) / (1000 * 60 * 60 * 24 * 30.44)
+                        ));
+                        entry.amount = parseFloat(transaction.Amount);
+                        entry.totalAmount = entry.amount * monthsToTarget;
+                    }
+    
+                    BudgetManager.addEntry('saving', entry);
+                } else {
+                    // Regular income/expense entries
+                    const entry = {
+                        category: categoryDetails.id,
+                        description: transaction.Description,
+                        amount: parseFloat(transaction.Amount),
+                        date: transaction.Date,
+                        frequency: transaction.Frequency || 'single',
+                        endDate: transaction.EndDate || undefined
+                    };
+                    
+                    BudgetManager.addEntry(transaction.Type, entry);
+                }
             }
-        });
+        }
         
-        // Save all changes
         BudgetManager.saveData();
-        
-        // Reset theme to default
         ThemeManager.setInitialTheme();
     }
 };

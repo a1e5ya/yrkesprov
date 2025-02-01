@@ -1,0 +1,98 @@
+# Function Catalog
+
+## BudgetManager.js
+- `init()`: Initializes budget management system. Sets up data structures, loads saved data, and binds event listeners.
+- `saveData()`: Saves current budget data to local storage and triggers update events.
+- `loadData()`: Retrieves and restores budget data from local storage.
+- `addEntry(type, entryData)`: Adds a new transaction entry. Handles different types (income/expense/saving) and validates data before saving.
+- `deleteEntry(entryId)`: Removes a specific transaction entry and updates the display.
+- `updateEntry(entryId, updates)`: Modifies an existing transaction entry with new data.
+- `calculateMultiYearBalance(years)`: Calculates projected balance over specified years, considering recurring transactions.
+- `getEntriesForPeriod(type, dateType, dateValue, forBalance)`: Retrieves transactions for a specific time period, handling recurring entries.
+- `updateDisplay()`: Refreshes the UI to reflect current data state.
+- `handleTypeSelection(type)`: Manages UI updates when switching between transaction types.
+- `toggleEditMode()`: Switches between view and edit modes for transactions.
+- `bindEditEvents()`: Sets up event listeners for transaction editing.
+
+## CategoryManager.js
+- `init()`: Initializes category management system and loads saved categories.
+- `loadCategories()`: Retrieves category data from storage.
+- `saveCategories()`: Persists category data to storage.
+- `addCategory(type, categoryData)`: Creates a new category with specified type and attributes.
+- `getCategoryDetails(categoryId, type)`: Retrieves detailed information about a specific category.
+- `displayCategories()`: Updates the UI to show current categories.
+- `populateCategorySelect(type)`: Fills category dropdown menus with appropriate options.
+- `handleTypeSelection(type)`: Manages UI updates when switching category types.
+- `handleIconSelection(e)`: Handles icon selection in category creation.
+- `handleDeleteCategory(e)`: Processes category deletion requests.
+
+## Calculator.js
+- `calculateSimpleInterest(principal, rate, years)`: Computes simple interest returns.
+- `calculateCompoundInterest(principal, rate, years)`: Computes compound interest returns.
+- `generateForecastData(initial, rate, years)`: Creates dataset for interest comparisons.
+
+## ExportManager.js
+- `init()`: Sets up export functionality.
+- `exportData()`: Initiates data export process.
+- `generateCSV()`: Converts current data to CSV format.
+- `downloadCSV(csv, filename)`: Handles file download process.
+
+## ImportManager.js
+- `init()`: Sets up import functionality.
+- `handleFile(file)`: Processes imported file data.
+- `processImportedData(data)`: Converts imported data to application format.
+- `parseCSV(csvContent)`: Converts CSV content to structured data.
+
+## Navigation.js
+- `init()`: Sets up navigation system.
+- `navigateToSection(sectionId)`: Handles screen transitions.
+- `showMainMenu()`: Returns to main menu.
+- `resetAllData()`: Clears all application data.
+- `bindNullButton()`: Sets up data reset functionality.
+
+## ReportManager.js
+- `init()`: Initializes reporting system.
+- `generateReport(type, sectionId)`: Creates new report based on current view.
+- `createPDF(report)`: Generates PDF document from report data.
+- `captureCharts(sectionId)`: Creates visual elements for reports.
+- `displayReports()`: Shows list of generated reports.
+
+## StorageManager.js
+- `set(key, value)`: Saves data to local storage.
+- `get(key)`: Retrieves data from local storage.
+- `remove(key)`: Deletes data from local storage.
+
+## ThemeManager.js
+- `init()`: Sets up theme management.
+- `setInitialTheme()`: Applies saved or default theme.
+- `applyTheme(theme)`: Changes application theme.
+- `bindEvents()`: Sets up theme switching listeners.
+
+## TimelineVisualizer.js
+- `init()`: Initializes timeline visualization.
+- `calculateMonthlyTotals()`: Computes data for timeline display.
+- `renderTimeline()`: Creates timeline visualization.
+- `updatePeriodBalance(data)`: Updates balance display for selected period.
+
+## Validator.js
+- `isPositiveNumber(value)`: Checks if value is a positive number.
+- `isValidDate(date)`: Validates date format and range.
+- `isNotEmpty(value)`: Ensures required fields have values.
+- `validateBudgetEntry(entry)`: Validates complete transaction entries.
+
+## Visualizer.js
+### ForecastVisualizer
+- `init()`: Sets up forecast visualization.
+- `initializeSliders()`: Creates interactive slider controls.
+- `updateVisualization()`: Refreshes forecast display.
+- `renderChart(data)`: Creates visual representation of forecast data.
+
+### PieChartVisualizer
+- `init()`: Sets up pie chart visualization.
+- `calculateTotals()`: Computes data for pie charts.
+- `renderPieCharts()`: Creates pie chart visualizations.
+- `createPieChart(selector, data, width, height, radius, title)`: Generates individual pie charts.
+
+## Formatter.js
+- `currency(amount, currency)`: Formats numbers as currency strings.
+- `date(dateString)`: Formats dates consistently across the application.

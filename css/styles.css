@@ -28,8 +28,21 @@
   --text-primary: #faf9f7cc;
   --button-border: currentColor;
   --input-bg: #2d2d2d;
-  --nav-buttons: #ffcb7d;
+  --nav-buttons: #FCBB29;
   --calendar-icon-invert: 1;
+}
+
+/* Only target the up-nav and down-nav buttons that are NOT in the main menu */
+[data-theme="dark"] section:not(#main-menu) .up-nav .little-nav,
+[data-theme="dark"] section:not(#main-menu) .down-nav .little-nav {
+  color: var(--nav-buttons);
+  border-color: var(--nav-buttons);
+}
+
+[data-theme="dark"] section:not(#main-menu) .up-nav .square-btn,
+[data-theme="dark"] section:not(#main-menu) .down-nav .square-btn {
+  color: var(--nav-buttons);
+  border-color: var(--nav-buttons);
 }
 
 
@@ -77,6 +90,7 @@
 
 * {
   font-family: "Lexend", serif;
+  font-size: 14px;
 }
 
 body {
@@ -93,12 +107,11 @@ body {
 section {
   display: none;
   flex-direction: column;
-  justify-content: space-between;
-  height: 100dvh;
+  min-height: 100dvh;
   width: 100%;
-  max-width: 500px;
+  max-width: 700px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -106,23 +119,48 @@ section {
   display: flex;
 }
 
+#menu-up-nav {
+  height: 30px;
+}
+
+.nav-group, .utility-group {
+padding: 0 30px;
+}
+
 .content {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  gap: 20px;
-
+  overflow-y: auto;
+  min-height: 0; /* Important for Firefox */
 }
 
 .up-nav, .down-nav {
+  flex: 0 0 auto; 
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 25px ;
+  padding: 25px 20px;
   height: 50px;
-  color: var(--nav-buttons);
+  background-color: var(--bg-primary);
+  z-index: 10;
+  position: sticky;
 }
+
+.down-nav {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-top: auto; 
+}
+
+.up-nav {
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
 
 .up-nav-reports {
   display: flex;
@@ -189,21 +227,19 @@ button {
 }
 
 
-.big-nav {
-  height: 100px;
-  width: 250px;
-  font-size: 24px;
-}
+
 
 .little-nav {
   height: 50px;
   width: 120px;
+  min-width: 120px;
   font-size: 18px;
   padding: 0 30px;
 }
 
 .square-btn {
   width: 50px;
+  min-width: 50px;
   height: 50px;
   font-size: 24px;
   display: flex;
@@ -262,6 +298,7 @@ background-color: var(--input-bg);
 
 #add-data-container {
 display: none;
+
 }
 
 #category-select {
@@ -282,8 +319,12 @@ display: none;
 
 
 
-
-
+#forecast-visualization {
+  margin: 20px auto 0;
+  max-width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
 
 #add-desc, #add-date {
   width: 170px;
@@ -323,16 +364,26 @@ display: none;
 }
 
 .forecast-input-group label {
-  width: 200px;
-}
-
-.forecast-input-group .row {
-  justify-content: flex-start;
+  max-width: 150px;
+  min-width: 150px;
 }
 
 
 
+.forecast-results .row{
+max-width: 400px;
+margin: 0 auto;
+}
 
+.slider-row {
+  display: flex;
+  justify-content: center;
+}
+
+.input-row {
+display: flex;
+justify-content: flex-start;
+}
 
 
 
@@ -415,9 +466,17 @@ display: none;
 
 
 
+#add-category-container {
+  padding: 20px 10px;
+}
 
+.category-icons-row {
+  max-width: 100%;
+}
 
 .category-icons-row i {
+  font-size: 20px;
+  width: 20px;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
@@ -432,12 +491,11 @@ display: none;
 }
 
 #category-list {
-    height: 400px;
-    min-width: 400px;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 20px;
+  padding: 10px;
   overflow-y: auto;
   scrollbar-width: none;  /* Firefox */
   -ms-overflow-style: none;  /* Internet Explorer and Edge */
@@ -461,7 +519,7 @@ display: none;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 4px;
+  padding: 8px;
   color: var(--text-primary);
 }
 
@@ -471,19 +529,8 @@ display: none;
   opacity: 0.8;
 }
 
-.category-item {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 10px;
-  border-radius: 5px;
-}
 
-.category-item i {
-  font-size: 20px;
-  width: 24px;
-  text-align: center;
-}
+
 
 .category-item span {
   flex-grow: 1;
@@ -518,11 +565,10 @@ display: none;
 
 
 #data-container {
-  padding: 20px;
+  flex: 1;
   overflow-y: auto;
-  flex-grow: 1;
-  scrollbar-width: none;  /* Firefox */
-  -ms-overflow-style: none;
+  padding-top: 20px;
+  min-height: 0;
 }
 
 #data-container::-webkit-scrollbar {
@@ -573,28 +619,32 @@ display: none;
 
 .entry-date {
   width: 100px;
-  font-size: 0.8em;
   color: var(--text-primary);
   opacity: 0.7;
 }
 
 .entry-desc {
   flex-grow: 1;
-  margin: 0 16px;
+  padding: 0 16px;
+  height: 50px;
+  display: flex;
+  align-items: center;
 }
 
 .entry-amount {
   font-weight: 500;
   text-align: right;
+  white-space: nowrap;
 }
 
 .balance-row {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   padding: 16px;
-  font-size: 1.2em;
   font-weight: 600;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .balance-amount {
@@ -641,45 +691,103 @@ display: none;
 
 
 
+/* In styles.css */
+#pie-visualization {
+  width: 100%;
+  height: 450px;
+  min-height: 0;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.pie-charts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+}
+
+#incomes-pie, #outflows-pie {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+}
+
+#incomes-pie svg, #outflows-pie svg {
+  width: 100%;
+  height: 100%;
+}
+
+#timeline-visualization {
+  max-width: 400px;
+  max-height: 600px;
+}
+
 
 #forecast-chart,
-#pie-visualization,
 #timeline-visualization {
-  min-width: 500px;
-    min-height: 300px;
-
-}
-
-
-
-/* For pie charts specifically */
-#incomes-pie svg,
-#outflows-pie svg {
-    width: 100%;
-    height: 100%;
-}
-
-/* For timeline chart */
-#timeline-visualization svg {
-    width: 100%;
-    height: 100%;
-}
-
-
-
-
-
-.entry-row.edit-mode {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
+  margin: 0 auto;
 }
 
+#forecast-chart svg,
+#pie-visualization svg,
+#timeline-visualization svg {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0 auto;
+  display: block;
+}
+
+
+
+
+
+
+.entry-row.edit-mode .edit-date {
+  width: 100px;
+  height: 24px;
+  font-size: 14px;
+}
+
+.entry-row.edit-mode .edit-desc {
+  flex-grow: 1;
+  height: 50px;
+  font-size: 14px;
+  width: 90%;
+}
+
+.entry-row.edit-mode .edit-amount {
+  width: 60%;
+  height: 50px;
+  text-align: right;
+  font-size: 14px;
+}
+
+/* Savings specific edit fields */
+.entry-row.edit-mode .edit-total-amount,
+.entry-row.edit-mode .edit-target-date {
+  width: 120px;
+  height: 24px;
+  font-size: 14px;
+}
+
+/* Common styles for all edit inputs */
 .entry-row.edit-mode input {
   border: 1px solid var(--text-primary) !important;
-  padding: 4px 8px;
   border-radius: 3px;
   background-color: var(--input-bg);
   color: var(--text-primary);
+  margin: 0;
+  height: 50px;
+  box-sizing: border-box;
 }
 
 .entry-row.edit-mode input:focus {
@@ -695,6 +803,7 @@ display: none;
   cursor: pointer;
   font-size: 1.2em;
   padding: 0 8px;
+  box-shadow: none;
 }
 
 .delete-transaction:hover {
@@ -736,12 +845,12 @@ display: none;
 .period-balance {
   text-align: center;
   margin: 10px 0;
-  font-size: 1.2em;
 }
 
 .balance-total {
   padding: 8px;
   border-radius: 4px;
+  white-space: nowrap;
 }
 
 .balance-total.positive {
@@ -764,13 +873,17 @@ margin: 5px;
 
 }
 
-.report-item {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  align-items: center;
+.delete-report {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 5px;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+    box-shadow: none;
 }
-
 
 
 
@@ -811,20 +924,12 @@ margin: 5px;
 
 
 
-#number-frequency-add {
-  width: 400px;
-}
-
-
-
 
 
 .reports-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 20px;
-  height: calc(100vh - 140px);
   overflow-y: auto;
 }
 
@@ -866,14 +971,12 @@ margin: 5px;
 .report-date {
   color: var(--text-primary);
   opacity: 0.7;
-  font-size: 0.9em;
 }
 
 .download-report {
   text-decoration: none;
   color: inherit;
   padding: 8px 16px;
-  font-size: 14px;
 }
 
 
@@ -885,4 +988,44 @@ input[type="date"] {
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(var(--calendar-icon-invert));
   cursor: pointer;
+}
+
+
+
+
+@media screen and (max-width: 768px) {
+  #pie-visualization {
+      flex-direction: column;
+  }
+  
+  #pie-visualization > div {
+      width: 100% !important;
+  }
+}
+
+
+
+
+@media screen and (max-width: 768px) {
+  section {
+    padding: 0 10px;
+  }
+
+  .content {
+    gap: 10px;
+  }
+
+
+  .little-nav {
+    height: 50px;
+    width: 100px;
+    min-width: 100px;
+    font-size: 16px;
+    padding: 0 30px;
+  }
+
+  .up-nav, .down-nav {
+    padding: 20px 10px;
+  }
+
 }

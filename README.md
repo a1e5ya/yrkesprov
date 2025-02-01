@@ -1,88 +1,102 @@
 # Budget Management Tool
 
-A comprehensive web-based personal finance management application focused on budget tracking, visualization, and financial forecasting.
+A comprehensive web-based personal finance management application designed for budget tracking, visualization, and financial forecasting, built with vanilla JavaScript and modern web technologies.
 
-## Features
+## Core Features
 
-### Core Functionality
-- **Transaction Management**
-  - Add, edit, and delete transactions
-  - Support for income, expenses, and savings
-  - Recurring transaction support (monthly/yearly)
-  - Category-based organization
+### Transaction Management
+- Income, expense, and savings tracking with support for one-time and recurring transactions
+- Monthly and yearly recurring transaction support
+- Category-based organization with custom icons
+- Built-in transaction editing and deletion capabilities
+- Automatic balance calculations and projections
 
-- **Visualization Tools**
-  - Timeline view with balance forecasting
-  - Category distribution pie charts
-  - Interactive savings calculator with compound interest
+### Data Visualization
+- **Timeline View**: Visual representation of financial flows over time with customizable periods
+- **Pie Charts**: Category distribution analysis for both income and outflow
+- **Savings Calculator**: Interactive compound interest calculator with visual comparison between simple and compound interest
 
-- **Category Management**
-  - Custom categories with icons
-  - Separate categories for income, expenses, and savings
-  - Visual category management interface
+### Budget Organization
+- Customizable categories for income, expenses, and savings
+- Icon-based category system with visual management interface
+- Hierarchical data organization with category-based summaries
+- Real-time balance calculations and forecasting
 
-### Additional Features
-- **Theme Support**: Dark/light mode with user preference persistence
-- **Report Generation**: Generate and download PDF reports
-- **Data Management**: Local storage with data persistence
-- **Period Selection**: Filter data by day/month/year
-- **Balance Tracking**: Real-time balance calculations
+### Data Management
+- Import/Export functionality for data backup and transfer
+- Local storage integration for persistent data
+- Period-based filtering (day/month/year)
+- Data reset capability
 
-## Technologies Used
+### Reports & Analysis
+- PDF report generation for different views (Timeline, Pie Charts, Forecasts)
+- Multiple timeframe analysis options
+- Balance projections across various periods
+- Detailed transaction breakdowns
 
-- **Core Technologies**
-  - HTML5 & CSS3 for structure and styling
-  - Vanilla JavaScript for core functionality
-  - Local Storage API for data persistence
+### User Experience
+- Dark/light theme support with system preference detection
+- Responsive design for various screen sizes
+- Icon-based interface with Font Awesome integration
+- Clean, modern interface using Lexend font family
 
-- **Libraries**
-  - D3.js for interactive visualizations
-  - jsPDF for PDF report generation
-  - Font Awesome for icons
-  - Google Fonts (Lexend)
+## Technical Implementation
 
-## Project Structure
+### Technologies
+- **Frontend**: HTML5, CSS3, Vanilla JavaScript
+- **Storage**: LocalStorage API
+- **Visualization**: D3.js
+- **Documentation**: PDF Generation with jsPDF
+- **UI Resources**: Font Awesome, Google Fonts (Lexend)
+
+### Architecture
+The application follows a modular architecture with clear separation of concerns:
 
 ```
 ├── css/
-│   └── styles.css            # Main stylesheet with theme support
+│   └── styles.css            # Core styling and theme implementation
 ├── js/
 │   ├── config/
-│   │   └── constants.js      # Global constants and configurations
+│   │   └── constants.js      # Application constants
 │   ├── modules/
-│   │   ├── budgetManager.js  # Transaction management
-│   │   ├── categoryManager.js # Category operations
-│   │   ├── calculator.js     # Financial calculations
-│   │   ├── formatter.js      # Data formatting utilities
-│   │   ├── navigation.js     # Screen navigation
-│   │   ├── reportManager.js  # Report generation
-│   │   ├── storage.js        # Local storage interface
-│   │   ├── themeManager.js   # Theme management
-│   │   ├── timelineVisualizer.js # Timeline visualization
-│   │   ├── validator.js      # Input validation
-│   │   └── visualizer.js     # Charts and visualizations
-│   └── script.js             # Main application initialization
-└── index.html                # Main HTML structure
+│   │   ├── budgetManager.js    # Core transaction logic
+│   │   ├── categoryManager.js  # Category handling
+│   │   ├── calculator.js       # Financial calculations
+│   │   ├── formatter.js        # Data formatting
+│   │   ├── navigation.js       # Screen management
+│   │   ├── reportManager.js    # Report generation
+│   │   ├── storage.js          # Data persistence
+│   │   ├── themeManager.js     # Theme handling
+│   │   ├── timelineVisualizer.js  # Timeline charts
+│   │   ├── validator.js        # Input validation
+│   │   └── visualizer.js       # Data visualization
+│   └── script.js             # Application initialization
+└── index.html                # Main application structure
 
 ```
 
-## Upcoming Features
-- Import/Export functionality for data backup
-- Enhanced reporting capabilities
-- Data visualization improvements
-- Testing implementation
+### Key Components
+- **Budget Manager**: Handles all transaction-related operations and calculations
+- **Category Manager**: Manages category creation, editing, and organization
+- **Visualization Modules**: Handle different types of data visualization (Timeline, Pie Charts)
+- **Theme Manager**: Handles theme switching and persistence
+- **Report Manager**: Manages PDF report generation and handling
+- **Storage Manager**: Handles data persistence and management
+- **Navigation**: Manages screen transitions and state
 
-## Getting Started
+## Setup and Usage
 
 1. Clone the repository
 2. Open index.html in a modern web browser
 3. No build process or dependencies required
+4. Start by adding categories and transactions
 
-## Browser Support
+## Browser Compatibility
 
-Tested and supported in latest versions of:
-- Chrome
+The application is optimized for and tested in:
+- Google Chrome (latest versions)
+- Modern browsers with ES6+ support
 
-## Development Status
+## License
 
-This project is in active development. Core features are implemented and functional, with additional features and improvements planned.
+MIT License - feel free to use and modify as needed.
