@@ -1,315 +1,347 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">        <title>Budget Tool MVP</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="description" content="Budget management tool for tracking income, expenses and savings">
+        <meta name="theme-color" content="#faf9f7">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Budget Tool MVP</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/styles.css">
     </head>
     <body>
-        <!-- Main Menu Screen -->
-        <section id="main-menu">
-            <div id="menu-up-nav" ></div>
-            <div class="content">
-                <div class="nav-group">
-                    <div class="up-nav">
-                        <button class="nav-btn little-nav color-blue-medium" data-target="budget-table">Table</button>
-                        <div class="placeholder-button"></div>
-                        <button class="nav-btn little-nav color-blue-medium" data-target="categories">Category</button>
-                    </div>
-                    <div class="up-nav">
-                        <button class="nav-btn little-nav color-pink-bright" data-target="budget-timeline">Timeline</button>
-                        <div class="placeholder-button"></div>
-                        <button class="nav-btn little-nav color-pink-bright" data-target="savings-forecast">Forecast</button>
-                    </div>
-                    <div class="up-nav">
-                        <button class="nav-btn little-nav color-pink-vibrant" data-target="budget-pie">Pie</button>
-                        <div class="placeholder-button"></div>
-                        <button class="nav-btn little-nav color-pink-vibrant" data-target="reports">Reports</button>
+        <main>
+            <!-- Main Menu Screen -->
+            <section id="main-menu" role="main">
+                <h1 class="visually-hidden">Budget Management Tool</h1>
+                <div id="menu-up-nav"></div>
+                <div class="content">
+                    <nav class="nav-group" role="navigation" aria-label="Main navigation">
+                        <div class="up-nav">
+                            <button class="nav-btn little-nav color-blue-medium" data-target="budget-table" aria-label="View budget table">Table</button>
+                            <div class="placeholder-button"></div>
+                            <button class="nav-btn little-nav color-blue-medium" data-target="categories" aria-label="Manage categories">Category</button>
+                        </div>
+                        <div class="up-nav">
+                            <button class="nav-btn little-nav color-pink-bright" data-target="budget-timeline" aria-label="View timeline">Timeline</button>
+                            <div class="placeholder-button"></div>
+                            <button class="nav-btn little-nav color-pink-bright" data-target="savings-forecast" aria-label="View forecast">Forecast</button>
+                        </div>
+                        <div class="up-nav">
+                            <button class="nav-btn little-nav color-pink-vibrant" data-target="budget-pie" aria-label="View pie charts">Pie</button>
+                            <div class="placeholder-button"></div>
+                            <button class="nav-btn little-nav color-pink-vibrant" data-target="reports" aria-label="View reports">Reports</button>
+                        </div>
+                    </nav>
+                    <!-- Utility Buttons -->
+                    <div class="utility-group">
+                        <div class="up-nav">
+                            <button id="import-btn" class="little-nav color-orange-light" aria-label="Import data">Import</button>
+                            <div class="placeholder-button"></div>
+                            <button id="export-btn" class="little-nav color-orange-light" aria-label="Export data">Export</button>
+                        </div>
+                        <div class="up-nav">
+                            <button id="null-btn" class="little-nav color-orange-dark" aria-label="Reset data">Null</button>
+                            <div class="placeholder-button"></div>
+                            <button id="dark-mode-btn" class="little-nav color-orange-dark" aria-label="Toggle dark mode">Dark</button>
+                        </div>
                     </div>
                 </div>
-                <!-- Utility Buttons -->
-                <div class="utility-group">
-                    <div class="up-nav">
-                        <button id="import-btn" class="little-nav color-orange-light">Import</button>
-                        <div class="placeholder-button"></div>
-                        <button id="export-btn" class="little-nav color-orange-light">Export</button>
-                    </div>
-                    <div class="up-nav">
-                        <button id="null-btn" class="little-nav color-orange-dark">Null</button>
-                        <div class="placeholder-button"></div>
-                        <button id="dark-mode-btn" class="little-nav color-orange-dark">Dark</button>
-                    </div>
-                </div>
-            </div>
-            <div class="down-nav">
+                <div class="down-nav" role="navigation" aria-label="Secondary navigation"></div>
+            </section>
 
-            </div>
-        </section>
-        <!-- Savings Forecasts Screen -->
-        <section id="savings-forecast">
-            <!-- Savings forecast content -->
-            <div id="forecast-visualization" class="content">
-                <div class="forecast-inputs">
-                    <div class="forecast-input-group">
-                        <div class="row input-row">
-                            <label for="forecast-initial">Initial Investment</label>
-                            <input
-                                type="number"
-                                id="forecast-initial"
-                                class="forecast-input"
-                                value="100"
-                            >
-                            €
+            <!-- Savings Forecasts Screen -->
+            <section id="savings-forecast" aria-label="Savings forecast">
+                <h2 class="visually-hidden">Savings Forecast</h2>
+                <div id="forecast-visualization" class="content">
+                    <div class="forecast-inputs" role="form" aria-label="Forecast parameters">
+                        <div class="forecast-input-group">
+                            <div class="row input-row">
+                                <label for="forecast-initial">Initial Investment</label>
+                                <div class="input-with-unit">
+                                    <input
+                                        type="number"
+                                        id="forecast-initial"
+                                        class="forecast-input"
+                                        value="100"
+                                        aria-label="Initial investment amount"
+                                    >
+                                    <span class="unit" aria-hidden="true">€</span>
+                                </div>
+                            </div>
+                            <div class="row slider-row">
+                                <div id="forecast-initial-container" class="forecast-slider" role="slider" aria-label="Initial investment slider"></div>
+                            </div>
                         </div>
-                        <div class="row slider-row">
-                            <div id="forecast-initial-container" class="forecast-slider"></div>
+                        <div class="forecast-input-group">
+                            <div class="row input-row">
+                                <label for="forecast-rate">Annual Interest Rate</label>
+                                <div class="input-with-unit">
+                                    <input
+                                        type="number"
+                                        id="forecast-rate"
+                                        class="forecast-input"
+                                        step="0.1" min="0.1" max="25" value="5.0"
+                                        aria-label="Annual interest rate"
+                                    >
+                                    <span class="unit" aria-hidden="true">%</span>
+                                </div>
+                            </div>
+                            <div class="row slider-row">
+                                <div id="forecast-rate-container" class="forecast-slider" role="slider" aria-label="Interest rate slider"></div>
+                            </div>
+                        </div>
+                        <div class="forecast-input-group">
+                            <div class="row input-row">
+                                <label for="forecast-years">Investment Period</label>
+                                <div class="input-with-unit">
+                                    <input
+                                        type="number"
+                                        id="forecast-years"
+                                        class="forecast-input"
+                                        value="10"
+                                        aria-label="Investment period in years"
+                                    >
+                                    <span class="unit" aria-hidden="true">Years</span>
+                                </div>
+                            </div>
+                            <div class="row slider-row">
+                                <div id="forecast-years-container" class="forecast-slider" role="slider" aria-label="Investment period slider"></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="forecast-input-group">
-                        <div class="row input-row">
-                            <label for="forecast-rate">Annual Interest Rate</label>
-                            <input
-                                type="number"
-                                id="forecast-rate"
-                                class="forecast-input"
-                                step="0.1" min="0.1" max="25" value="5.0"
-                            >
-                            %
+                    <div class="forecast-results" role="region" aria-label="Forecast results">
+                        <div class="row">
+                            <span>With Simple Interest:</span>
+                            <span id="forecast-simple" aria-live="polite">0 €</span>
                         </div>
-                        <div class="row slider-row">
-                            <div id="forecast-rate-container" class="forecast-slider"></div>
+                        <div class="row">
+                            <span>With Compound Interest:</span>
+                            <span id="forecast-compound" aria-live="polite">0 €</span>
                         </div>
                     </div>
-                    <div class="forecast-input-group">
-                        <div class="row input-row">
-                            <label for="forecast-years">Investment Period</label>
-                            <input
-                                type="number"
-                                id="forecast-years"
-                                class="forecast-input"
-                                value="10"
-                            >
-                            Years
-                        </div>
-                        <div class="row slider-row">
-                            <div id="forecast-years-container" class="forecast-slider"></div>
-                        </div>
-                    </div>
+                    <div id="forecast-chart" role="img" aria-label="Forecast comparison chart"></div>
                 </div>
-                <div class="forecast-results">
-                    <div class="row">With Simple Interest:
-                        <span id="forecast-simple">0 €</span>
-                    </div>
-                    <div class="row">With Compound Interest:
-                        <span id="forecast-compound">0 €</span>
-                    </div>
+                <nav class="down-nav" role="navigation">
+                    <button class="nav-btn little-nav" data-target="reports" aria-label="Go to reports">Report</button>
+                    <button class="nav-btn little-nav" data-target="main-menu" aria-label="Return to main menu">Menu</button>
+                </nav>
+            </section>
+
+            <!-- Reports Screen -->
+            <section id="reports" aria-label="Reports">
+                <h2 class="visually-hidden">Reports</h2>
+                <nav class="up-nav" role="navigation">
+                    <button class="nav-btn little-nav" data-target="budget-timeline" aria-label="View timeline">Timeline</button>
+                    <button class="nav-btn little-nav" data-target="budget-pie" aria-label="View pie charts">Pie</button>
+                    <button class="nav-btn little-nav" data-target="savings-forecast" aria-label="View forecast">Forecast</button>
+                </nav>
+                <div id="report-preview" class="content" role="region" aria-label="Report list">
+                    <!-- PDF report preview will be dynamically generated here -->
                 </div>
-                <div id="forecast-chart"></div>
-            </div>
-            <div class="down-nav">
-                <button class="nav-btn little-nav" data-target="reports">Report</button>
-                <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
-            </div>
-        </section>
-        <!-- Reports Screen -->
-        <section id="reports">
-            <div class="up-nav">
-                <button class="nav-btn little-nav" data-target="budget-timeline">Timeline</button>
-                <button class="nav-btn little-nav" data-target="budget-pie">Pie</button>
-                <button class="nav-btn little-nav" data-target="savings-forecast">Forecast</button>
-            </div>
-            <!-- Reports content -->
-            <div id="report-preview" class="content">
-                <!-- PDF report preview will be dynamically generated here -->
-            </div>
-            <div class="down-nav">
-                <div class="placeholder-button"></div>
-                <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
-            </div>
-        </section>
-        <!-- Budget Table View Screen -->
-        <section id="budget-table">
-            <div class="up-nav">
-                <button class="nav-btn little-nav" data-target="budget-timeline">Timeline</button>
-                <button class="nav-btn little-nav" data-target="budget-pie">Pie</button>
-                <button id="edit-btn" class="square-btn">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </button>
-                <button id="toggle-btn" class="square-btn">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
-            </div>
-            <div id="add-data-container" class="content">
-                <div class="row">
-                    <button id="income-data-btn" class="little-nav">Income</button>
-                    <button id="expense-data-btn" class="little-nav">Expense</button>
-                    <button id="saving-data-btn" class="little-nav">Saving</button>
-                </div>
-                <div class="row">
-                    <select id="category-select"></select>
-                    <button id="categories-btn" class="nav-btn square-btn" data-target="categories">
-                        <i class="fa-solid fa-gear"></i>
+                <nav class="down-nav" role="navigation">
+                    <div class="placeholder-button"></div>
+                    <button class="nav-btn little-nav" data-target="main-menu" aria-label="Return to main menu">Menu</button>
+                </nav>
+            </section>
+
+            <!-- Budget Table View Screen -->
+            <section id="budget-table" aria-label="Budget table">
+                <h2 class="visually-hidden">Budget Table</h2>
+                <nav class="up-nav" role="navigation">
+                    <button class="nav-btn little-nav" data-target="budget-timeline" aria-label="View timeline">Timeline</button>
+                    <button class="nav-btn little-nav" data-target="budget-pie" aria-label="View pie charts">Pie</button>
+                    <button id="edit-btn" class="square-btn" aria-label="Edit entries">
+                        <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
                     </button>
-                </div>
-                <div class="row">
-                    <input id="add-desc" type="text" placeholder="Description">
-                    <input id="add-date" type="date">
-                </div>
-                <div class="row" id="number-frequency-add">
-                    <input id="add-amount" type="number" placeholder="0">
-                    <select id="add-frequency" class="frequency-select">
-                        <option value="single">Single</option>
-                        <option value="monthly">Monthly</option>
-                        <option value="yearly">Yearly</option>
-                    </select>
-                    <button id="add-data-btn" class="little-nav">Add</button>
-                </div>
-            </div>
-            <div id="data-container">
-                <div id="incomes">
-                    <div id="incomes-data-table">
-                        <!-- Budget data will be dynamically populated here --></div>
-                </div>
-                <div id="expenses">
-                    <div id="expenses-data-table">
-                        <!-- Budget data will be dynamically populated here --></div>
-                </div>
-                <div id="savings">
-                    <div id="savings-data-table">
-                        <!-- Budget data will be dynamically populated here --></div>
-                </div>
-                <div class="row balance-row">
-                    <span>Balance after</span>
-                    <div class="timeline-controls">                    
-                        <select id="table-balance">       
-                            <option value="12">1 year</option>                    
-                            <option value="24">2 years</option>
-                            <option value="36">3 years</option>
-                            <option value="60">5 years</option>
-                            <option value="240">20 years</option>
-                        </select>              
+                    <button id="toggle-btn" class="square-btn" aria-label="Add new entry">
+                        <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                    </button>
+                </nav>
+                <form id="add-data-container" class="content" role="form" aria-label="Add new entry">
+                    <div class="row">
+                        <button id="income-data-btn" class="little-nav" type="button" aria-pressed="false">Income</button>
+                        <button id="expense-data-btn" class="little-nav" type="button" aria-pressed="false">Expense</button>
+                        <button id="saving-data-btn" class="little-nav" type="button" aria-pressed="false">Saving</button>
+                    </div>
+                    <div class="row">
+                        <select id="category-select" aria-label="Select category"></select>
+                        <button id="categories-btn" class="nav-btn square-btn" data-target="categories" type="button" aria-label="Manage categories">
+                            <i class="fa-solid fa-gear" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="row">
+                        <input id="add-desc" type="text" placeholder="Description" aria-label="Description">
+                        <input id="add-date" type="date" aria-label="Date">
+                    </div>
+                    <div class="row" id="number-frequency-add">
+                        <input id="add-amount" type="number" placeholder="0" aria-label="Amount">
+                        <select id="add-frequency" class="frequency-select" aria-label="Frequency">
+                            <option value="single">Single</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                        <button id="add-data-btn" class="little-nav" type="submit">Add</button>
+                    </div>
+                </form>
+                <div id="data-container" role="region" aria-label="Transaction list">
+                    <div id="incomes">
+                        <div id="incomes-data-table" aria-label="Income transactions">
+                            <!-- Budget data will be dynamically populated here -->
+                        </div>
+                    </div>
+                    <div id="expenses">
+                        <div id="expenses-data-table" aria-label="Expense transactions">
+                            <!-- Budget data will be dynamically populated here -->
+                        </div>
+                    </div>
+                    <div id="savings">
+                        <div id="savings-data-table" aria-label="Savings transactions">
+                            <!-- Budget data will be dynamically populated here -->
+                        </div>
+                    </div>
+                    <div class="row balance-row">
+                        <span>Balance after</span>
+                        <div class="timeline-controls">                    
+                            <select id="table-balance" aria-label="Select period for balance calculation">       
+                                <option value="12">1 year</option>                    
+                                <option value="24">2 years</option>
+                                <option value="36">3 years</option>
+                                <option value="60">5 years</option>
+                                <option value="240">20 years</option>
+                            </select>              
                         </div>                 
-                       <span>=</span>
-                    <div class="period-balance"></div>
-                </div>
-            </div>
-            <div class="down-nav">
-                <div class="placeholder-button"></div>
-                <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
-            </div>
-        </section>
-        <!-- Categories Management Screen -->
-        <section id="categories">
-            <div id="add-category-container" class="content">
-                <div class="row">
-                    <button id="income-category-btn" class="little-nav">Income</button>
-                    <button id="expense-category-btn" class="little-nav">Expense</button>
-                    <button id="saving-category-btn" class="little-nav">Saving</button>
-                </div>
-                <div>
-                    <div class="row category-icons-row">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-piggy-bank"></i>
-                        <i class="fa-solid fa-car"></i>
-                        <i class="fa-solid fa-mug-hot"></i>
-                        <i class="fa-solid fa-gift"></i>
-                        <i class="fa-solid fa-key"></i>
-                        <i class="fa-solid fa-briefcase"></i>
-                        <i class="fa-solid fa-landmark"></i>
-                        <i class="fa-solid fa-shirt"></i>
-                    </div>
-                    <div class="row category-icons-row">
-                        <i class="fa-solid fa-stethoscope"></i>
-                        <i class="fa-solid fa-wrench"></i>
-                        <i class="fa-solid fa-chart-line"></i>
-                        <i class="fa-solid fa-chair"></i>
-                        <i class="fa-solid fa-utensils"></i>
-                        <i class="fa-solid fa-carrot"></i>
-                        <i class="fa-solid fa-blender"></i>
-                        <i class="fa-solid fa-paw"></i>
-                        <i class="fa-solid fa-gas-pump"></i>
+                        <span>=</span>
+                        <div class="period-balance" aria-live="polite"></div>
                     </div>
                 </div>
-                <div class="row">
-                    <input id="add-category-desc" type="text" placeholder="Description">
-                    <button id="add-data-category-btn" class="little-nav">Add</button>
-                </div></div>
-                <div id="category-list">
+                <nav class="down-nav" role="navigation">
+                    <div class="placeholder-button"></div>
+                    <button class="nav-btn little-nav" data-target="main-menu" aria-label="Return to main menu">Menu</button>
+                </nav>
+            </section>
+
+            <!-- Categories Management Screen -->
+            <section id="categories" aria-label="Category management">
+                <h2 class="visually-hidden">Category Management</h2>
+                <form id="add-category-container" class="content" role="form" aria-label="Add new category">
+                    <div class="row">
+                        <button id="income-category-btn" class="little-nav" type="button" aria-pressed="false">Income</button>
+                        <button id="expense-category-btn" class="little-nav" type="button" aria-pressed="false">Expense</button>
+                        <button id="saving-category-btn" class="little-nav" type="button" aria-pressed="false">Saving</button>
+                    </div>
+                    <div role="group" aria-label="Select category icon">
+                        <div class="row category-icons-row">
+                            <i class="fa-solid fa-star" role="button" tabindex="0" aria-label="Star icon"></i>
+                            <i class="fa-solid fa-piggy-bank" role="button" tabindex="0" aria-label="Piggy bank icon"></i>
+                            <i class="fa-solid fa-car" role="button" tabindex="0" aria-label="Car icon"></i>
+                            <i class="fa-solid fa-mug-hot" role="button" tabindex="0" aria-label="Coffee mug icon"></i>
+                            <i class="fa-solid fa-gift" role="button" tabindex="0" aria-label="Gift icon"></i>
+                            <i class="fa-solid fa-key" role="button" tabindex="0" aria-label="Key icon"></i>
+                            <i class="fa-solid fa-briefcase" role="button" tabindex="0" aria-label="Briefcase icon"></i>
+                            <i class="fa-solid fa-landmark" role="button" tabindex="0" aria-label="Landmark icon"></i>
+                            <i class="fa-solid fa-shirt" role="button" tabindex="0" aria-label="Shirt icon"></i>
+                        </div>
+                        <div class="row category-icons-row">
+                            <i class="fa-solid fa-stethoscope" role="button" tabindex="0" aria-label="Stethoscope icon"></i>
+                            <i class="fa-solid fa-wrench" role="button" tabindex="0" aria-label="Wrench icon"></i>
+                            <i class="fa-solid fa-chart-line" role="button" tabindex="0" aria-label="Chart line icon"></i>
+                            <i class="fa-solid fa-chair" role="button" tabindex="0" aria-label="Chair icon"></i>
+                            <i class="fa-solid fa-utensils" role="button" tabindex="0" aria-label="Utensils icon"></i>
+                            <i class="fa-solid fa-carrot" role="button" tabindex="0" aria-label="Carrot icon"></i>
+                            <i class="fa-solid fa-blender" role="button" tabindex="0" aria-label="Blender icon"></i>
+                            <i class="fa-solid fa-paw" role="button" tabindex="0" aria-label="Paw icon"></i>
+                            <i class="fa-solid fa-gas-pump" role="button" tabindex="0" aria-label="Gas pump icon"></i>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input id="add-category-desc" type="text" placeholder="Description" aria-label="Category name">
+                        <button id="add-data-category-btn" class="little-nav" type="submit">Add</button>
+                    </div>
+                </form>
+                <div id="category-list" role="list" aria-label="Categories list">
                     <!-- Category list will be dynamically generated here -->
                 </div>
-            <div class="down-nav">
-                <button class="nav-btn little-nav" data-target="budget-table">Back</button>
-                <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
-            </div>
-        </section>
-        <!-- Budget Pie View Screen -->
-        <section id="budget-pie">
-            <div class="up-nav">
-                <button class="nav-btn little-nav" data-target="budget-timeline">Timeline</button>
-                <div class="placeholder-button"></div>
-                <button class="nav-btn little-nav" data-target="budget-table">Table</button>
-            </div>
-            <div class="content">
-                
-            <div id="pie-visualization"></div>
-        </div>
-        <div class="down-nav">
-            <button class="nav-btn little-nav" data-target="reports">Report</button>
-            <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
-        </div>
-    </section>
-    <!-- Budget Timeline View Screen -->
-    <section id="budget-timeline">
-        <div class="up-nav">
-            <div class="placeholder-button"></div>
-            <button class="nav-btn little-nav" data-target="budget-pie">Pie</button>
-            <button class="nav-btn little-nav" data-target="budget-table">Table</button>
-        </div>
-        <div class="content">
-            <div class="row balance-row">
-                <span>Balance after</span>
-                <div class="timeline-controls">
-                    <select id="timeline-scale">
-                        <option value="12">1 year</option>                    
-                        <option value="24">2 years</option>
-                        <option value="36">3 years</option>
-                        <option value="60">5 years</option>
-                        <option value="240">20 years</option>
-                    </select>
+                <nav class="down-nav" role="navigation">
+                    <button class="nav-btn little-nav" data-target="budget-table" aria-label="Return to budget table">Back</button>
+                    <button class="nav-btn little-nav" data-target="main-menu" aria-label="Return to main menu">Menu</button>
+                </nav>
+            </section>
+
+            <!-- Budget Pie View Screen -->
+            <section id="budget-pie" aria-label="Budget pie charts">
+                <h2 class="visually-hidden">Budget Distribution</h2>
+                <nav class="up-nav" role="navigation">
+                    <button class="nav-btn little-nav" data-target="budget-timeline" aria-label="View timeline">Timeline</button>
+                    <div class="placeholder-button"></div>
+                    <button class="nav-btn little-nav" data-target="budget-table" aria-label="View budget table">Table</button>
+                </nav>
+                <div class="content">
+                    <div id="pie-visualization" role="img" aria-label="Budget distribution charts"></div>
                 </div>
-                <span>=</span>
-                <div class="period-balance"></div>
-            </div>
-            <div id="timeline-visualization"></div>
-        </div>
-        <div class="down-nav">
-            <button class="nav-btn little-nav" data-target="reports">Report</button>
-            <button class="nav-btn little-nav" data-target="main-menu">Menu</button>
-        </div>
-    </section>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
-    <script src="https://kit.fontawesome.com/64fc752e27.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/polyfills.umd.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
-    <script src="js/config/constants.js"></script>
-    <script src="js/modules/storage.js"></script>
-    <script src="js/modules/validation.js"></script>
-    <script src="js/modules/formatter.js"></script>
-    <script src="js/modules/navigation.js"></script>
-    <script src="js/modules/themeManager.js"></script>
-    <script src="js/modules/budgetManager.js"></script>
-    <script src="js/modules/categoryManager.js"></script>
-    <script src="js/modules/reportManager.js"></script>
-    <script src="js/modules/calculator.js"></script>
-    <script src="js/modules/visualizer.js"></script>
-    <script src="js/modules/timelineVisualizer.js"></script>
-    <script src="js/modules/exportManager.js"></script>
-    <script src="js/modules/importManager.js"></script>
-    <script src="js/script.js"></script>
-</body>
+                <nav class="down-nav" role="navigation">
+                    <button class="nav-btn little-nav" data-target="reports" aria-label="Go to reports">Report</button>
+                    <button class="nav-btn little-nav" data-target="main-menu" aria-label="Return to main menu">Menu</button>
+                </nav>
+            </section>
+
+            <!-- Budget Timeline View Screen -->
+            <section id="budget-timeline" aria-label="Budget timeline">
+                <h2 class="visually-hidden">Budget Timeline</h2>
+                <nav class="up-nav" role="navigation">
+                    <div class="placeholder-button"></div>
+                    <button class="nav-btn little-nav" data-target="budget-pie" aria-label="View pie charts">Pie</button>
+                    <button class="nav-btn little-nav" data-target="budget-table" aria-label="View budget table">Table</button>
+                </nav>
+                <div class="content">
+                    <div class="row balance-row">
+                        <span>Balance after</span>
+                        <div class="timeline-controls">
+                            <select id="timeline-scale" aria-label="Select timeline period">
+                                <option value="12">1 year</option>                    
+                                <option value="24">2 years</option>
+                                <option value="36">3 years</option>
+                                <option value="60">5 years</option>
+                                <option value="240">20 years</option>
+                            </select>
+                        </div>
+                        <span>=</span>
+                        <div class="period-balance" aria-live="polite"></div>
+                    </div>
+                    <div id="timeline-visualization" role="img" aria-label="Budget timeline visualization"></div>
+                </div>
+                <nav class="down-nav" role="navigation">
+                    <button class="nav-btn little-nav" data-target="reports" aria-label="Go to reports">Report</button>
+                    <button class="nav-btn little-nav" data-target="main-menu" aria-label="Return to main menu">Menu</button>
+                </nav>
+            </section>
+        </main>
+
+        <!-- Scripts -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+        <script src="https://kit.fontawesome.com/64fc752e27.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/polyfills.umd.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        
+        <script src="js/config/constants.js"></script>
+        <script src="js/modules/storage.js"></script>
+        <script src="js/modules/validation.js"></script>
+        <script src="js/modules/formatter.js"></script>
+        <script src="js/modules/navigation.js"></script>
+        <script src="js/modules/themeManager.js"></script>
+        <script src="js/modules/budgetManager.js"></script>
+        <script src="js/modules/categoryManager.js"></script>
+        <script src="js/modules/reportManager.js"></script>
+        <script src="js/modules/calculator.js"></script>
+        <script src="js/modules/pieVisualizer.js"></script>         <!-- Add this line -->
+        <script src="js/modules/forecastVisualizer.js"></script>    <!-- Add this line -->
+        <script src="js/modules/timelineVisualizer.js"></script>
+        <script src="js/modules/exportManager.js"></script>
+        <script src="js/modules/importManager.js"></script>
+        <script src="js/script.js"></script>
+    </body>
 </html>

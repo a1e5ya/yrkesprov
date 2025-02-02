@@ -1,7 +1,20 @@
+/*
+███████ ████████  ██████  ██████   █████   ██████  ███████ 
+██         ██    ██    ██ ██   ██ ██   ██ ██       ██      
+███████    ██    ██    ██ ██████  ███████ ██   ███ █████   
+     ██    ██    ██    ██ ██   ██ ██   ██ ██    ██ ██      
+███████    ██     ██████  ██   ██ ██   ██  ██████  ███████ 
+*/
+
 const StorageManager = {
+    /**
+     * Stores data in localStorage with automatic JSON stringification for objects
+     * @param {string} key - The storage key
+     * @param {any} value - The value to store (string or object)
+     * @returns {boolean} True if storage successful, false if failed
+     */
     set(key, value) {
         try {
-            // If value is string, store directly, otherwise JSON stringify
             const storageValue = typeof value === 'string' ? value : JSON.stringify(value);
             localStorage.setItem(key, storageValue);
             return true;
@@ -11,10 +24,14 @@ const StorageManager = {
         }
     },
 
+    /**
+     * Retrieves data from localStorage with automatic JSON parsing for objects
+     * @param {string} key - The storage key to retrieve
+     * @returns {any} Retrieved value (parsed if JSON, raw if string, null if error)
+     */
     get(key) {
         try {
             const item = localStorage.getItem(key);
-            // Try parsing as JSON, if fails return raw value
             try {
                 return JSON.parse(item);
             } catch {
@@ -26,6 +43,11 @@ const StorageManager = {
         }
     },
 
+    /**
+     * Removes an item from localStorage
+     * @param {string} key - The storage key to remove
+     * @returns {boolean} True if removal successful, false if failed
+     */
     remove(key) {
         try {
             localStorage.removeItem(key);

@@ -1,4 +1,16 @@
+/*
+██ ███    ███ ██████   ██████  ██████  ████████ 
+██ ████  ████ ██   ██ ██    ██ ██   ██    ██    
+██ ██ ████ ██ ██████  ██    ██ ██████     ██    
+██ ██  ██  ██ ██      ██    ██ ██   ██    ██    
+██ ██      ██ ██       ██████  ██   ██    ██    
+*/
+
 const ImportManager = {
+    /**
+     * Initializes import functionality
+     * Sets up event listener for import button
+     */
     init() {
         const importBtn = document.getElementById('import-btn');
         if (importBtn) {
@@ -6,6 +18,10 @@ const ImportManager = {
         }
     },
 
+    /**
+     * Shows file selection dialog for importing data
+     * Creates and triggers hidden file input
+     */
     showImportDialog() {
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
@@ -23,6 +39,11 @@ const ImportManager = {
         document.body.removeChild(fileInput);
     },
 
+    /**
+     * Processes the imported file
+     * Reads content, parses CSV, and updates application data
+     * @param {File} file - The imported CSV file
+     */
     async handleFile(file) {
         try {
             const content = await this.readFile(file);
@@ -39,6 +60,11 @@ const ImportManager = {
         }
     },
 
+    /**
+     * Reads file content as text
+     * @param {File} file - File to read
+     * @returns {Promise<string>} File content as text
+     */
     readFile(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -48,6 +74,12 @@ const ImportManager = {
         });
     },
 
+    /**
+     * Parses CSV content into structured data
+     * Handles headers and value cleaning
+     * @param {string} csvContent - Raw CSV content
+     * @returns {Array<Object>} Array of parsed data objects
+     */
     parseCSV(csvContent) {
         const lines = csvContent.split('\n');
         const headers = lines[0].split(',').map(header => 
@@ -72,6 +104,11 @@ const ImportManager = {
         return results;
     },
 
+    /**
+     * Processes imported data and updates application state
+     * Handles categories and transactions separately
+     * @param {Array<Object>} data - Parsed CSV data
+     */
     async processImportedData(data) {
         // Clear all existing data
         BudgetManager.data = { income: [], expense: [], saving: [] };
@@ -151,4 +188,5 @@ const ImportManager = {
     }
 };
 
+// Initialize import functionality when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => ImportManager.init());

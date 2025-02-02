@@ -54,35 +54,26 @@ The application follows a modular architecture with clear separation of concerns
 
 ```
 ├── css/
-│   └── styles.css            # Core styling and theme implementation
+│   └── styles.css            # Main stylesheet with theme support
 ├── js/
 │   ├── config/
-│   │   └── constants.js      # Application constants
+│   │   └── constants.js      # Global constants and configurations
 │   ├── modules/
-│   │   ├── budgetManager.js    # Core transaction logic
-│   │   ├── categoryManager.js  # Category handling
-│   │   ├── calculator.js       # Financial calculations
-│   │   ├── formatter.js        # Data formatting
-│   │   ├── navigation.js       # Screen management
-│   │   ├── reportManager.js    # Report generation
-│   │   ├── storage.js          # Data persistence
-│   │   ├── themeManager.js     # Theme handling
-│   │   ├── timelineVisualizer.js  # Timeline charts
-│   │   ├── validator.js        # Input validation
-│   │   └── visualizer.js       # Data visualization
-│   └── script.js             # Application initialization
-└── index.html                # Main application structure
-
+│   │   ├── budgetManager.js  # Transaction management
+│   │   ├── categoryManager.js # Category operations
+│   │   ├── calculator.js     # Financial calculations
+│   │   ├── formatter.js      # Data formatting utilities
+│   │   ├── navigation.js     # Screen navigation
+│   │   ├── reportManager.js  # Report generation
+│   │   ├── storage.js        # Local storage interface
+│   │   ├── themeManager.js   # Theme management
+│   │   ├── timelineVisualizer.js # Timeline visualization
+│   │   ├── validator.js      # Input validation
+│   │   ├── forecastVisualizer.js # Charts and visualizations
+│   │   └── pieVisualizer.js  # Charts and visualizations
+│   └── script.js             # Main application initialization
+└── index.html                # Main HTML structure
 ```
-
-### Key Components
-- **Budget Manager**: Handles all transaction-related operations and calculations
-- **Category Manager**: Manages category creation, editing, and organization
-- **Visualization Modules**: Handle different types of data visualization (Timeline, Pie Charts)
-- **Theme Manager**: Handles theme switching and persistence
-- **Report Manager**: Manages PDF report generation and handling
-- **Storage Manager**: Handles data persistence and management
-- **Navigation**: Manages screen transitions and state
 
 ## Setup and Usage
 

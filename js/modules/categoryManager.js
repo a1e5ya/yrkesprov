@@ -1,4 +1,17 @@
+/*
+ ██████  █████  ████████ ███████  ██████   ██████  ██████  ██    ██ 
+██      ██   ██    ██    ██      ██       ██    ██ ██   ██  ██  ██  
+██      ███████    ██    █████   ██   ███ ██    ██ ██████    ████   
+██      ██   ██    ██    ██      ██    ██ ██    ██ ██   ██    ██    
+ ██████ ██   ██    ██    ███████  ██████   ██████  ██   ██    ██    
+*/
+
 const CategoryManager = {
+    /**
+     * Default categories for each transaction type
+     * Each category has a unique ID, name, icon, and color
+     * @type {Object.<string, Array>}
+     */
     categories: {
         income: [
             { id: 1, name: 'Salary', icon: 'fa-briefcase', color: 'var(--green-bright)' },
@@ -15,14 +28,26 @@ const CategoryManager = {
         ]
     },
 
+    /**
+     * Color scheme for different transaction types
+     * @type {Object.<string, string>}
+     */
     typeColors: {
         'income': 'var(--green-bright)',
         'expense': 'var(--pink-soft)',
         'saving': 'var(--orange-medium)'
     },
 
+    /**
+     * Currently selected category type
+     * @type {string|null}
+     */
     selectedType: null,
 
+    /**
+     * Initializes category management functionality
+     * Loads saved categories and sets up event handlers
+     */
     init() {
         this.loadCategories();
         this.bindEvents();
@@ -30,6 +55,10 @@ const CategoryManager = {
         this.handleTypeSelection('income');
     },
 
+    /**
+     * Loads categories from local storage
+     * Falls back to default categories if none saved
+     */
     loadCategories() {
         const saved = StorageManager.get(STORAGE_KEYS.CATEGORIES);
         if (saved) {
@@ -37,15 +66,30 @@ const CategoryManager = {
         }
     },
 
+    /**
+     * Saves current categories to local storage
+     */
     saveCategories() {
         StorageManager.set(STORAGE_KEYS.CATEGORIES, this.categories);
     },
 
+    /**
+     * Retrieves details of a specific category
+     * @param {number} categoryId - ID of the category
+     * @param {string} type - Transaction type (income/expense/saving)
+     * @returns {Object|undefined} Category details if found
+     */
     getCategoryDetails(categoryId, type) {
         const categoryList = this.categories[type] || [];
         return categoryList.find(cat => cat.id.toString() === categoryId.toString());
     },
 
+    /**
+     * Adds a new category to the specified type
+     * @param {string} type - Transaction type
+     * @param {Object} categoryData - Category details (name, icon)
+     * @returns {Object} Newly created category
+     */
     addCategory(type, categoryData) {
         const newCategory = {
             id: Date.now(),
@@ -59,6 +103,10 @@ const CategoryManager = {
         return newCategory;
     },
 
+    /**
+     * Updates the category list display in the UI
+     * Groups categories by type and adds delete buttons
+     */
     displayCategories() {
         const categoryList = document.getElementById('category-list');
         if (!categoryList) return;
@@ -78,7 +126,7 @@ const CategoryManager = {
             categoryList.appendChild(sectionTitle);
 
             items.forEach(category => {
-                const type = title.toLowerCase().slice(0, -1); // Convert 'Incomes' to 'income'
+                const type = title.toLowerCase().slice(0, -1);
                 const color = this.typeColors[type];
                 const categoryElement = document.createElement('div');
                 categoryElement.className = 'category-item';
@@ -92,6 +140,10 @@ const CategoryManager = {
         });
     },
 
+    /**
+     * Populates category select dropdown for a specific type
+     * @param {string} type - Transaction type
+     */
     populateCategorySelect(type) {
         const categorySelect = document.getElementById('category-select');
         if (!categorySelect) return;
@@ -108,6 +160,10 @@ const CategoryManager = {
         });
     },
 
+    /**
+     * Sets up event listeners for category management
+     * Handles type selection, icon selection, and category addition/deletion
+     */
     bindEvents() {
         ['income', 'expense', 'saving'].forEach(type => {
             const btn = document.getElementById(`${type}-category-btn`);
@@ -134,6 +190,11 @@ const CategoryManager = {
         });
     },
 
+    /**
+     * Handles category type selection
+     * Updates UI state and button styles
+     * @param {string} type - Selected transaction type
+     */
     handleTypeSelection(type) {
         const color = this.typeColors[type];
         this.selectedType = type;
@@ -153,6 +214,10 @@ const CategoryManager = {
         this.displayCategories();
     },
 
+    /**
+     * Handles icon selection for new categories
+     * @param {Event} e - Click event
+     */
     handleIconSelection(e) {
         const selectedType = this.getSelectedType() || 'income';
         this.resetIconSelection();
@@ -160,13 +225,16 @@ const CategoryManager = {
         e.target.style.color = this.typeColors[selectedType];
     },
 
+    /**
+     * Handles adding a new category
+     * Validates input and updates category list
+     */
     handleAddCategory() {
         const selectedType = this.getSelectedType() || 'income';
         const selectedIcon = document.querySelector('.category-icons-row i.selected');
         const nameInput = document.getElementById('add-category-desc');
 
         if (!selectedIcon || !nameInput.value) {
-
             return;
         }
 
@@ -180,6 +248,11 @@ const CategoryManager = {
         this.populateCategorySelect(selectedType);
     },
 
+    /**
+     * Handles category deletion
+     * Removes category and updates storage/display
+     * @param {Event} e - Click event
+     */
     handleDeleteCategory(e) {
         const typeMap = {
             'Incomes': 'income',
@@ -195,10 +268,18 @@ const CategoryManager = {
         this.displayCategories();
     },
 
+    /**
+     * Gets currently selected category type
+     * @returns {string|null} Selected type or null if none selected
+     */
     getSelectedType() {
         return this.selectedType || null;
     },
 
+    /**
+     * Resets icon selection state
+     * Removes selection styling from all icons
+     */
     resetIconSelection() {
         document.querySelectorAll('.category-icons-row i').forEach(icon => {
             icon.style.color = 'var(--text-primary)';

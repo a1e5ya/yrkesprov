@@ -1,14 +1,43 @@
-// budgetManager.js - Part 1: Core Setup and Initialization
+/*
+██████  ██    ██ ██████   ██████  ███████ ████████ 
+██   ██ ██    ██ ██   ██ ██       ██         ██    
+██████  ██    ██ ██   ██ ██   ███ █████      ██    
+██   ██ ██    ██ ██   ██ ██    ██ ██         ██    
+██████   ██████  ██████   ██████  ███████    ██    
 
+███    ███  █████  ███    ██  █████   ██████  ███████ ██████  
+████  ████ ██   ██ ████   ██ ██   ██ ██       ██      ██   ██ 
+██ ████ ██ ███████ ██ ██  ██ ███████ ██   ███ █████   ██████  
+██  ██  ██ ██   ██ ██  ██ ██ ██   ██ ██    ██ ██      ██   ██ 
+██      ██ ██   ██ ██   ████ ██   ██  ██████  ███████ ██   ██ 
+*/
+
+/**
+ * BudgetManager module handles all budget-related operations including
+ * transaction management, calculations, and data persistence.
+ * @namespace
+ */
 const BudgetManager = {
+    /** @type {Object} Stores all budget data organized by transaction type */
     data: null,
+
+    /** @type {boolean} Tracks whether edit mode is active */
     isEditMode: false,
+
+    /** @type {Object} Color mappings for different transaction types */
     typeColors: {
         'income': 'var(--green-bright)',
         'expense': 'var(--pink-soft)',
         'saving': 'var(--orange-medium)'
     },
 
+    /**
+     * Debounces a function call
+     * @private
+     * @param {Function} func - Function to debounce
+     * @param {number} wait - Delay in milliseconds
+     * @returns {Function} Debounced function
+     */
     _debounce(func, wait) {
         let timeout;
         return function executedFunction(...args) {
@@ -21,6 +50,10 @@ const BudgetManager = {
         };
     },
 
+    /**
+     * Initializes the budget management system
+     * Sets up initial data structures and event listeners
+     */
     init() {
         this.data = { income: [], expense: [], saving: [] };
         this.loadData();
@@ -29,7 +62,6 @@ const BudgetManager = {
         this.initializeAddButton();
         this.handleTypeSelection('income');
         
-        // Attach table balance event listener
         const tableBalanceSelect = document.getElementById('table-balance');
         if (tableBalanceSelect) {
             tableBalanceSelect.addEventListener('change', (e) => {
@@ -51,11 +83,14 @@ const BudgetManager = {
         this.updateDisplay();
     },
 
+    /**
+     * Updates the balance display in the table view
+     * @param {number} months - Number of months to calculate balance for
+     */
     updateTableBalance(months) {
         const container = document.querySelector('#budget-table .period-balance');
         if (!container) return;
     
-        // Cache the calculation
         const key = `balance_${months}`;
         if (!this._balanceCache) this._balanceCache = {};
         
@@ -72,16 +107,25 @@ const BudgetManager = {
         `;
     },
 
+    /**
+     * Clears the balance calculation cache
+     */
     clearBalanceCache() {
         this._balanceCache = {};
     },
 
+    /**
+     * Saves current budget data to storage
+     */
     saveData() {
         StorageManager.set(STORAGE_KEYS.BUDGET, this.data);
         this.clearBalanceCache();
         document.dispatchEvent(new Event('budgetUpdated'));
     },
 
+    /**
+     * Loads budget data from storage
+     */
     loadData() {
         const savedData = StorageManager.get(STORAGE_KEYS.BUDGET);
         this.data = {
@@ -92,13 +136,35 @@ const BudgetManager = {
         this.updateDisplay();
     },
 
-    // budgetManager.js - Part 2: Balance Calculations
+    /*
+██████   █████  ██       █████  ███    ██  ██████ ███████ 
+██   ██ ██   ██ ██      ██   ██ ████   ██ ██      ██      
+██████  ███████ ██      ███████ ██ ██  ██ ██      █████   
+██   ██ ██   ██ ██      ██   ██ ██  ██ ██ ██      ██      
+██████  ██   ██ ███████ ██   ██ ██   ████  ██████ ███████ 
 
+ ██████  █████  ██       ██████ ██    ██ ██       █████  ████████  ██████  ██████  
+██      ██   ██ ██      ██      ██    ██ ██      ██   ██    ██    ██    ██ ██   ██ 
+██      ███████ ██      ██      ██    ██ ██      ███████    ██    ██    ██ ██████  
+██      ██   ██ ██      ██      ██    ██ ██      ██   ██    ██    ██    ██ ██   ██ 
+ ██████ ██   ██ ███████  ██████  ██████  ███████ ██   ██    ██     ██████  ██   ██ 
+*/
+
+    /**
+     * Calculates the total balance over multiple years
+     * Takes into account recurring transactions and their frequencies
+     * @param {number} years - Number of years to calculate for
+     * @returns {number} Total balance for the period
+     */
     calculateMultiYearBalance(years) {
         const startDate = new Date();
         const numberOfMonths = years * 12;
         
-        // Calculate totals for each type
+        /**
+         * Calculates total amount for a set of entries over the period
+         * @param {Array} entries - Array of transaction entries
+         * @returns {number} Total amount
+         */
         const calculateTotal = (entries) => {
             return entries.reduce((total, entry) => {
                 let entryTotal = 0;
@@ -128,63 +194,78 @@ const BudgetManager = {
         const expenseTotal = calculateTotal(this.data.expense || []);
         const savingsTotal = calculateTotal(this.data.saving || []);
     
-        // Debug output
-    
         return incomeTotal - (expenseTotal + savingsTotal);
     },
 
-// In budgetManager.js, update the getEntriesForPeriod method:
-
-getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
-    const entries = [];
-    if (!dateValue || !this.data[type]) return entries;
-    
-    const selectedDate = new Date(dateValue);
-    const endDate = dateType === 'all' ? new Date(2100, 11, 31) : this.getPeriodEndDate(selectedDate, dateType);
-    
-    this.data[type].forEach(entry => {
-        const entryDate = new Date(entry.date);
+    /**
+     * Retrieves entries for a specific period
+     * Handles recurring transactions and date filtering
+     * @param {string} type - Transaction type (income/expense/saving)
+     * @param {string} dateType - Period type (day/month/year/all)
+     * @param {string} dateValue - Reference date for period
+     * @param {boolean} [forBalance=false] - Whether entries are for balance calculation
+     * @returns {Array} Filtered entries for the period
+     */
+    getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
+        const entries = [];
+        if (!dateValue || !this.data[type]) return entries;
         
-        if (entryDate > endDate) return;
+        const selectedDate = new Date(dateValue);
+        const endDate = dateType === 'all' ? 
+            new Date(2100, 11, 31) : 
+            this.getPeriodEndDate(selectedDate, dateType);
         
-        if (entry.frequency === 'single') {
-            if (this.isDateInPeriod(entryDate, selectedDate, dateType)) {
-                entries.push(entry);
-            }
-            return;
-        }
-        
-        // Handle recurring entries
-        if (entry.frequency === 'monthly') {
-            let currentDate = new Date(entry.date);
-            const entryEndDate = entry.endDate ? new Date(entry.endDate) : endDate;
+        this.data[type].forEach(entry => {
+            const entryDate = new Date(entry.date);
             
-            while (currentDate <= endDate && currentDate <= entryEndDate) {
-                if (this.isDateInPeriod(currentDate, selectedDate, dateType)) {
-                    entries.push({
-                        ...entry,
-                        date: currentDate.toISOString().split('T')[0]
-                    });
+            if (entryDate > endDate) return;
+            
+            if (entry.frequency === 'single') {
+                if (this.isDateInPeriod(entryDate, selectedDate, dateType)) {
+                    entries.push(entry);
                 }
-                currentDate.setMonth(currentDate.getMonth() + 1);
+                return;
             }
-        } else if (entry.frequency === 'yearly') {
-            let currentDate = new Date(entry.date);
-            while (currentDate <= endDate) {
-                if (this.isDateInPeriod(currentDate, selectedDate, dateType)) {
-                    entries.push({
-                        ...entry,
-                        date: currentDate.toISOString().split('T')[0]
-                    });
+            
+            // Handle recurring entries
+            if (entry.frequency === 'monthly') {
+                let currentDate = new Date(entry.date);
+                const entryEndDate = entry.endDate ? 
+                    new Date(entry.endDate) : endDate;
+                
+                while (currentDate <= endDate && currentDate <= entryEndDate) {
+                    if (this.isDateInPeriod(currentDate, selectedDate, dateType)) {
+                        entries.push({
+                            ...entry,
+                            date: currentDate.toISOString().split('T')[0]
+                        });
+                    }
+                    currentDate.setMonth(currentDate.getMonth() + 1);
                 }
-                currentDate.setFullYear(currentDate.getFullYear() + 1);
+            } else if (entry.frequency === 'yearly') {
+                let currentDate = new Date(entry.date);
+                while (currentDate <= endDate) {
+                    if (this.isDateInPeriod(currentDate, selectedDate, dateType)) {
+                        entries.push({
+                            ...entry,
+                            date: currentDate.toISOString().split('T')[0]
+                        });
+                    }
+                    currentDate.setFullYear(currentDate.getFullYear() + 1);
+                }
             }
-        }
-    });
-    
-    return entries;
-},
+        });
+        
+        return entries;
+    },
 
+    /**
+     * Checks if a date falls within a specified period
+     * @param {Date} date - Date to check
+     * @param {Date} selectedDate - Reference date for period
+     * @param {string} periodType - Type of period (day/month/year)
+     * @returns {boolean} Whether date is in period
+     */
     isDateInPeriod(date, selectedDate, periodType) {
         switch (periodType) {
             case 'day':
@@ -199,6 +280,12 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
         }
     },
 
+    /**
+     * Gets the end date for a specified period
+     * @param {Date} date - Start date of period
+     * @param {string} periodType - Type of period (day/month/year)
+     * @returns {Date} End date of period
+     */
     getPeriodEndDate(date, periodType) {
         const endDate = new Date(date);
         switch (periodType) {
@@ -217,8 +304,32 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
         }
     },
 
-    // budgetManager.js - Part 3: Entry Management
+    /*
+███████ ███    ██ ████████ ██████  ██    ██ 
+██      ████   ██    ██    ██   ██  ██  ██  
+█████   ██ ██  ██    ██    ██████    ████   
+██      ██  ██ ██    ██    ██   ██    ██    
+███████ ██   ████    ██    ██   ██    ██    
 
+███    ███  █████  ███    ██  █████   ██████  ███████ ███    ███ ███████ ███    ██ ████████ 
+████  ████ ██   ██ ████   ██ ██   ██ ██       ██      ████  ████ ██      ████   ██    ██    
+██ ████ ██ ███████ ██ ██  ██ ███████ ██   ███ █████   ██ ████ ██ █████   ██ ██  ██    ██    
+██  ██  ██ ██   ██ ██  ██ ██ ██   ██ ██    ██ ██      ██  ██  ██ ██      ██  ██ ██    ██    
+██      ██ ██   ██ ██   ████ ██   ██  ██████  ███████ ██      ██ ███████ ██   ████    ██    
+*/
+
+    /**
+     * Adds a new transaction entry to the budget
+     * Handles special logic for savings entries
+     * @param {string} type - Transaction type (income/expense/saving)
+     * @param {Object} entryData - Transaction details
+     * @param {string} entryData.category - Category ID
+     * @param {string} entryData.description - Transaction description
+     * @param {number} entryData.amount - Transaction amount
+     * @param {string} entryData.date - Transaction date
+     * @param {string} entryData.frequency - Transaction frequency
+     * @returns {boolean} Success status of the operation
+     */
     addEntry(type, entryData) {
         if (type === 'saving') {
             const today = new Date();
@@ -256,7 +367,7 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
             entryData.date = todayStart.toISOString().split('T')[0];
             entryData.endDate = targetStart.toISOString().split('T')[0];
             entryData.frequency = 'monthly';
-            entryData.originalFrequency = originalFrequency; // Store original frequency
+            entryData.originalFrequency = originalFrequency;
         }
     
         if (!this.validateEntry(entryData)) return false;
@@ -269,7 +380,7 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
             totalAmount: entryData.totalAmount,
             date: entryData.date,
             frequency: entryData.frequency || 'single',
-            originalFrequency: entryData.originalFrequency, // Include original frequency
+            originalFrequency: entryData.originalFrequency,
             endDate: entryData.endDate
         };
     
@@ -283,6 +394,10 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
         return true;
     },
 
+    /**
+     * Deletes a transaction entry
+     * @param {number} entryId - ID of entry to delete
+     */
     deleteEntry(entryId) {
         ['income', 'expense', 'saving'].forEach(type => {
             this.data[type] = this.data[type].filter(entry => entry.id !== entryId);
@@ -291,12 +406,61 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
         this.updateDisplay();
     },
 
+    /**
+     * Updates an existing transaction entry
+     * @param {number} entryId - ID of entry to update
+     * @param {Object} updates - Fields to update and their new values
+     */
+    updateEntry(entryId, updates) {
+        ['income', 'expense', 'saving'].forEach(type => {
+            this.data[type] = this.data[type].map(entry => {
+                if (entry.id === entryId) {
+                    return { ...entry, ...updates };
+                }
+                return entry;
+            });
+        });
+        this.saveData();
+        this.updateDisplay();
+    },
+
+    /**
+     * Validates a transaction entry
+     * @param {Object} entry - Entry to validate
+     * @returns {boolean} Whether entry is valid
+     */
     validateEntry(entry) {
         return Validator.validateBudgetEntry(entry);
     },
 
-    // budgetManager.js - Part 4: UI Event Handlers
+    /**
+     * Gets formatted date string for today
+     * @returns {string} Today's date in YYYY-MM-DD format
+     */
+    getTodayDate() {
+        const today = new Date();
+        return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    },
 
+    /*
+██    ██ ██    
+██    ██ ██    
+██    ██ ██    
+██    ██ ██    
+ ██████  ██    
+                
+██   ██  █████  ███    ██ ██████  ██      ███████ ██████  ███████ 
+██   ██ ██   ██ ████   ██ ██   ██ ██      ██      ██   ██ ██      
+███████ ███████ ██ ██  ██ ██   ██ ██      █████   ██████  ███████ 
+██   ██ ██   ██ ██  ██ ██ ██   ██ ██      ██      ██   ██      ██ 
+██   ██ ██   ██ ██   ████ ██████  ███████ ███████ ██   ██ ███████ 
+*/
+
+    /**
+     * Handles selection of transaction type
+     * Updates UI elements based on selected type
+     * @param {string} type - Selected transaction type (income/expense/saving)
+     */
     handleTypeSelection(type) {
         const color = this.typeColors[type];
         
@@ -312,14 +476,12 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
         if (frequencySelect) {
             if (type === 'saving') {
                 frequencySelect.style.display = 'block';
-                // Update frequency options for savings
                 frequencySelect.innerHTML = `
                     <option value="single">Target</option>
                     <option value="monthly">Monthly</option>
                 `;
             } else {
                 frequencySelect.style.display = 'block';
-                // Restore original options for income/expense
                 frequencySelect.innerHTML = `
                     <option value="single">Single</option>
                     <option value="monthly">Monthly</option>
@@ -336,6 +498,10 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
         CategoryManager.populateCategorySelect(type);
     },
 
+    /**
+     * Initializes type selection buttons
+     * Sets up event listeners for type switching
+     */
     initializeTypeButtons() {
         ['income', 'expense', 'saving'].forEach(type => {
             const btn = document.getElementById(`${type}-data-btn`);
@@ -343,6 +509,10 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
         });
     },
 
+    /**
+     * Initializes edit mode button
+     * Sets up event listener for toggling edit mode
+     */
     initializeEditButton() {
         const editBtn = document.getElementById('edit-btn');
         if (editBtn) {
@@ -355,11 +525,22 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
         }
     },
 
+    /**
+     * Initializes add transaction button
+     * Sets up event listener for adding new transactions
+     */
     initializeAddButton() {
         const addDataBtn = document.getElementById('add-data-btn');
-        if (!addDataBtn) return;
+        const addForm = document.getElementById('add-data-container');
+        if (!addDataBtn || !addForm) return;
 
-        addDataBtn.addEventListener('click', () => {
+        // Prevent form submission
+        addForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+        });
+
+        addDataBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             const selectedTypeBtn = document.querySelector('#add-data-container button.selected');
             if (!selectedTypeBtn) {
                 alert('Please select a type (Income/Expense/Saving)');
@@ -381,6 +562,10 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
         });
     },
 
+    /**
+     * Toggles edit mode for transactions
+     * Updates UI and enables/disables editing features
+     */
     toggleEditMode() {
         this.isEditMode = !this.isEditMode;
         const editBtn = document.getElementById('edit-btn');
@@ -393,6 +578,10 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
         this.updateDisplay();
     },
 
+    /**
+     * Binds event handlers for edit mode functionality
+     * Sets up delete and edit capabilities for transactions
+     */
     bindEditEvents() {
         if (!this.isEditMode) return;
     
@@ -411,7 +600,6 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
         document.querySelectorAll('.entry-row.edit-mode').forEach(row => {
             const entryId = parseInt(row.dataset.id);
             
-            // Find the entry in data
             let entry;
             ['income', 'expense', 'saving'].forEach(type => {
                 const found = this.data[type].find(e => e.id === entryId);
@@ -421,7 +609,9 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
             if (!entry) return;
     
             const inputs = row.querySelectorAll('input');
+            const frequencySelect = row.querySelector('.edit-frequency');
             
+            // Handle input changes
             inputs.forEach(input => {
                 input.addEventListener('change', () => {
                     const updates = {};
@@ -433,25 +623,54 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
                         updates.description = input.value;
                     }
                     if (input.classList.contains('edit-amount')) {
-                        updates.amount = parseFloat(input.value);
+                        // For savings, update both monthly amount and total
+                        if (entry.frequency === 'monthly') {
+                            const startDate = new Date(entry.date);
+                            const endDate = new Date(entry.endDate);
+                            const months = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24 * 30.44));
+                            updates.amount = parseFloat(input.value);
+                            updates.totalAmount = updates.amount * months;
+                            
+                            // Update the total amount display if it exists
+                            const totalAmountInput = row.querySelector('.edit-total-amount');
+                            if (totalAmountInput) {
+                                totalAmountInput.value = updates.totalAmount;
+                            }
+                        }
                     }
                     if (input.classList.contains('edit-target-date')) {
                         updates.endDate = input.value;
                         
-                        // Recalculate monthly amount based on new target date
                         const startDate = new Date(entry.date);
                         const endDate = new Date(input.value);
                         const months = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24 * 30.44));
+                        
+                        // Update monthly amount based on total
                         const totalAmountInput = row.querySelector('.edit-total-amount');
                         if (totalAmountInput) {
-                            updates.amount = parseFloat(totalAmountInput.value) / months;
+                            const totalAmount = parseFloat(totalAmountInput.value);
+                            updates.amount = totalAmount / months;
+                            
+                            // Update the monthly amount display
+                            const monthlyInput = row.querySelector('.edit-amount');
+                            if (monthlyInput) {
+                                monthlyInput.value = updates.amount.toFixed(2);
+                            }
                         }
                     }
                     if (input.classList.contains('edit-total-amount')) {
                         const startDate = new Date(entry.date);
-                        const endDate = new Date(row.querySelector('.edit-target-date')?.value || entry.endDate);
+                        const endDate = new Date(row.querySelector('.edit-target-date').value);
                         const months = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24 * 30.44));
-                        updates.amount = parseFloat(input.value) / months;
+                        
+                        updates.totalAmount = parseFloat(input.value);
+                        updates.amount = updates.totalAmount / months;
+                        
+                        // Update the monthly amount display
+                        const monthlyInput = row.querySelector('.edit-amount');
+                        if (monthlyInput) {
+                            monthlyInput.value = updates.amount.toFixed(2);
+                        }
                     }
                     
                     if (Object.keys(updates).length > 0) {
@@ -459,24 +678,58 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
                     }
                 });
             });
+    
+            // Handle frequency changes
+            if (frequencySelect) {
+                frequencySelect.addEventListener('change', () => {
+                    const updates = {
+                        frequency: frequencySelect.value
+                    };
+                    this.updateEntry(entryId, updates);
+                });
+            }
+    
+            // Handle delete button
+            const deleteButton = row.querySelector('.delete-transaction');
+            if (deleteButton) {
+                deleteButton.addEventListener('click', () => {
+                    if (confirm('Delete this transaction?')) {
+                        this.deleteEntry(entryId);
+                    }
+                });
+            }
         });
     },
 
-    updateEntry(entryId, updates) {
-        ['income', 'expense', 'saving'].forEach(type => {
-            this.data[type] = this.data[type].map(entry => {
-                if (entry.id === entryId) {
-                    return { ...entry, ...updates };
-                }
-                return entry;
-            });
-        });
-        this.saveData();
-        this.updateDisplay();
+    /**
+     * Clears the add transaction form
+     * Resets all input fields to their default values
+     */
+    clearAddForm() {
+        document.getElementById('add-desc').value = '';
+        document.getElementById('add-date').value = this.getTodayDate();
+        document.getElementById('add-amount').value = '';
+        document.getElementById('add-frequency').value = 'single';
     },
 
-    // budgetManager.js - Part 5: Display and Update Methods
+    /*
+██████  ██ ███████ ██████  ██       █████  ██    ██ 
+██   ██ ██ ██      ██   ██ ██      ██   ██  ██  ██  
+██   ██ ██ ███████ ██████  ██      ███████   ████   
+██   ██ ██      ██ ██      ██      ██   ██    ██    
+██████  ██ ███████ ██      ███████ ██   ██    ██    
 
+ ██████  ███████ ███    ██ ███████ ██████   █████  ████████  ██████  ██████  
+██       ██      ████   ██ ██      ██   ██ ██   ██    ██    ██    ██ ██   ██ 
+██   ███ █████   ██ ██  ██ █████   ██████  ███████    ██    ██    ██ ██████  
+██    ██ ██      ██  ██ ██ ██      ██   ██ ██   ██    ██    ██    ██ ██   ██ 
+ ██████  ███████ ██   ████ ███████ ██   ██ ██   ██    ██     ██████  ██   ██ 
+*/
+
+    /**
+     * Updates the entire budget display
+     * Recalculates totals and refreshes all UI elements
+     */
     updateDisplay() {
         if (!this.data) return;
     
@@ -513,6 +766,11 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
         document.dispatchEvent(new Event('budgetUpdated'));
     },
 
+    /**
+     * Calculates totals for each category
+     * @param {Array} entries - Array of transaction entries
+     * @returns {Object} Totals organized by category
+     */
     calculateCategoryTotals(entries = []) {
         const totals = {};
         entries.forEach(entry => {
@@ -523,7 +781,6 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
                 };
             }
             
-            // Calculate total based on entry type
             let entryTotal = parseFloat(entry.amount);
             
             // For savings with monthly frequency and end date
@@ -540,16 +797,13 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
         return totals;
     },
 
-    clearAddForm() {
-        document.getElementById('add-desc').value = '';
-        document.getElementById('add-date').value = this.getTodayDate();
-        document.getElementById('add-amount').value = '';
-        document.getElementById('add-frequency').value = 'single';
-    },
-
-
-    // budgetManager.js - Part 6: HTML Generation Methods
-
+    /**
+     * Creates HTML for a budget section
+     * @param {string} title - Section title
+     * @param {Object} totals - Category totals
+     * @param {string} type - Transaction type
+     * @returns {string} Generated HTML
+     */
     createSectionHTML(title, totals, type) {
         if (Object.keys(totals).length === 0) return '';
         
@@ -565,6 +819,13 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
         `;
     },
 
+    /**
+     * Creates HTML for a category group
+     * @param {string} categoryId - Category identifier
+     * @param {Object} data - Category data
+     * @param {string} type - Transaction type
+     * @returns {string} Generated HTML
+     */
     createCategoryGroupHTML(categoryId, data, type) {
         const categoryDetails = CategoryManager.getCategoryDetails(categoryId, type);
         const icon = categoryDetails ? `<i class="fa-solid ${categoryDetails.icon}"></i>` : '';
@@ -587,6 +848,11 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
         `;
     },
 
+    /**
+     * Creates HTML for a transaction entry
+     * @param {Object} entry - Transaction entry
+     * @returns {string} Generated HTML
+     */
     createEntryHTML(entry) {
         if (entry.frequency === 'monthly' && entry.endDate) {
             const startDate = new Date(entry.date);
@@ -595,7 +861,7 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
             const totalAmount = entry.totalAmount || (entry.amount * months);
             
             const progressSegments = Math.min(Math.max(months, 1), 36); // Cap at 36 segments
-    
+        
             return `
                 <div class="entry-row ${this.isEditMode ? 'edit-mode' : ''}" data-id="${entry.id}">
                     <div class="saving-details">
@@ -617,47 +883,56 @@ getEntriesForPeriod(type, dateType, dateValue, forBalance = false) {
                                 Formatter.date(entry.endDate)}
                         </span>
                         <span class="duration">${months} months</span>
-                        <span class="monthly-amount">
-                            ${this.isEditMode ? 
-                                `<input type="number" class="edit-amount" value="${entry.amount}" style="border: 1px solid var(--text-primary);">` :
-                                `${Formatter.currency(entry.amount)}/month`}
-                        </span>
+                        <div class="monthly-amount-group">
+                            <span class="monthly-amount">
+                                ${this.isEditMode ? 
+                                    `<input type="number" class="edit-amount" value="${entry.amount}" style="border: 1px solid var(--text-primary);">` :
+                                    `${Formatter.currency(entry.amount)}/month`}
+                            </span>
+                            ${this.isEditMode ? '<button class="delete-transaction" aria-label="Delete transaction">×</button>' : ''}
+                        </div>
                     </div>
                     <div class="progress-bar">
                         ${Array(progressSegments).fill('<div class="progress-segment"></div>').join('')}
                     </div>
-                    ${this.isEditMode ? '<button class="delete-transaction">×</button>' : ''}
                 </div>
             `;
         }
     
-        return `
-            <div class="entry-row ${this.isEditMode ? 'edit-mode' : ''}" data-id="${entry.id}">
-                <div class="entry-date">
-                    ${this.isEditMode ? 
-                        `<input type="date" class="edit-date" value="${entry.date}">` :
-                        Formatter.date(entry.date)}
-                    ${entry.frequency && entry.frequency !== 'single' ? ` (${entry.frequency})` : ''}
-                </div>
-                <div class="entry-desc">
-                    ${this.isEditMode ? 
-                        `<input type="text" class="edit-desc" value="${entry.description}">` :
-                        entry.description}
-                </div>
-                <div class="entry-amount">
-                    ${this.isEditMode ? 
-                        `<input type="number" class="edit-amount" value="${entry.amount}">` :
-                        Formatter.currency(entry.amount)}
-                </div>
-                ${this.isEditMode ? '<button class="delete-transaction">×</button>' : ''}
-            </div>
-        `;
-    },
 
-    getTodayDate() {
-        const today = new Date();
-        return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    },
+        return `
+    <div class="entry-row ${this.isEditMode ? 'edit-mode' : ''}" data-id="${entry.id}">
+        <div class="entry-date-group">
+            <div class="entry-date">
+                ${this.isEditMode ? 
+                    `<input type="date" class="edit-date" value="${entry.date}">` :
+                    Formatter.date(entry.date)}
+            </div>
+            ${this.isEditMode ? `
+                <select class="edit-frequency">
+                    <option value="single" ${entry.frequency === 'single' ? 'selected' : ''}>Single</option>
+                    <option value="monthly" ${entry.frequency === 'monthly' ? 'selected' : ''}>Monthly</option>
+                    <option value="yearly" ${entry.frequency === 'yearly' ? 'selected' : ''}>Yearly</option>
+                </select>
+            ` : entry.frequency && entry.frequency !== 'single' ? 
+                `<span class="entry-frequency">(${entry.frequency})</span>` : 
+                ''}
+        </div>
+        <div class="entry-desc">
+            ${this.isEditMode ? 
+                `<input type="text" class="edit-desc" value="${entry.description}">` :
+                entry.description}
+        </div>
+        <div class="entry-amount">
+            ${this.isEditMode ? 
+                `<input type="number" class="edit-amount" value="${entry.amount}">` :
+                Formatter.currency(entry.amount)}
+        </div>
+        ${this.isEditMode ? '<button class="delete-transaction" aria-label="Delete transaction">×</button>' : ''}
+    </div>
+`;
+    }
 };
 
+// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => BudgetManager.init());

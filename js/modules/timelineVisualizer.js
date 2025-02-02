@@ -1,3 +1,15 @@
+/*
+████████ ██ ███    ███ ███████ ██      ██ ███    ██ ███████ 
+   ██    ██ ████  ████ ██      ██      ██ ████   ██ ██      
+   ██    ██ ██ ████ ██ █████   ██      ██ ██ ██  ██ █████   
+   ██    ██ ██  ██  ██ ██      ██      ██ ██  ██ ██ ██      
+   ██    ██ ██      ██ ███████ ███████ ██ ██   ████ ███████ 
+*/
+
+/**
+ * Scale options for timeline visualization
+ * @enum {string}
+ */
 const SCALE_OPTIONS = {
     MONTHLY: 'monthly',
     QUARTERLY: 'quarterly',
@@ -5,9 +17,16 @@ const SCALE_OPTIONS = {
     YEARLY: 'yearly'
 };
 
-
-
+/**
+ * TimelineVisualizer module handles the creation and management of
+ * timeline-based visualizations for budget data
+ * @namespace
+ */
 const TimelineVisualizer = {
+    /**
+     * Initializes the timeline visualization
+     * Sets up event listeners for window resize and budget updates
+     */
     init() {
         this.renderTimeline();
         window.addEventListener('resize', this.renderTimeline.bind(this));
@@ -19,11 +38,13 @@ const TimelineVisualizer = {
         });
     },
     
+    /**
+     * Updates the period balance display based on calculated data
+     * @param {Object[]} data - Timeline data points
+     */
     updatePeriodBalance(data) {
-        // Calculate true period balance from the budget manager
         const scaleSelect = document.getElementById('timeline-scale');
-        const years = parseInt(scaleSelect.value) / 12; // Convert months to years
-        
+        const years = parseInt(scaleSelect.value) / 12;
         const totalBalance = BudgetManager.calculateMultiYearBalance(years);
         
         const formattedBalance = totalBalance >= 0 ? 
@@ -37,10 +58,14 @@ const TimelineVisualizer = {
         `;
     },
     
+    /**
+     * Creates and initializes the scale selector control
+     * Sets up the timeline period dropdown with appropriate options
+     */
     createScaleSelector() {
         const container = document.getElementById('timeline-visualization');
         const width = container.clientWidth - margin.left - margin.right;
-const height = Math.min(width * 0.8, 600);
+        const height = Math.min(width * 0.8, 600);
         const controls = document.createElement('div');
         controls.className = 'timeline-controls';
         controls.innerHTML = `
@@ -60,6 +85,11 @@ const height = Math.min(width * 0.8, 600);
         });
     },
 
+    /**
+     * Calculates monthly totals for timeline visualization
+     * Aggregates data based on selected time scale
+     * @returns {Object[]} Array of period data objects
+     */
     calculateMonthlyTotals() {
         const scaleSelect = document.getElementById('timeline-scale');
         const monthsToShow = parseInt(scaleSelect.value);
@@ -83,7 +113,6 @@ const height = Math.min(width * 0.8, 600);
                 balance: 0
             };
     
-            // Aggregate data based on scale
             let datesInPeriod = [];
             if (scale === SCALE_OPTIONS.MONTHLY) {
                 datesInPeriod = [dateStr];
@@ -104,7 +133,6 @@ const height = Math.min(width * 0.8, 600);
                 }
             }
     
-            // Sum up all values in the period
             datesInPeriod.forEach(date => {
                 periodData.incomes += BudgetManager.getEntriesForPeriod('income', 'month', date, true)
                     .reduce((sum, entry) => sum + Number(entry.amount), 0);
@@ -116,7 +144,6 @@ const height = Math.min(width * 0.8, 600);
     
             periodData.balance = periodData.incomes - (periodData.expenses + periodData.savings);
             
-            // Only add unique periods based on scale
             const shouldAdd = scale === SCALE_OPTIONS.MONTHLY ||
                 (scale === SCALE_OPTIONS.QUARTERLY && date.getMonth() % 3 === 0) ||
                 (scale === SCALE_OPTIONS.BIANNUAL && date.getMonth() % 6 === 0) ||
@@ -130,6 +157,10 @@ const height = Math.min(width * 0.8, 600);
         return periods;
     },
 
+    /**
+     * Renders the timeline visualization
+     * Creates and updates the D3.js based timeline chart
+     */
     renderTimeline() {
         const scaleSelect = document.getElementById('timeline-scale');
         const monthsToShow = parseInt(scaleSelect?.value || '24');
@@ -230,21 +261,20 @@ const height = Math.min(width * 0.8, 600);
             .attr("fill", "var(--orange-medium)");
 
         // Balance values
-
-svg.selectAll(".balance-text")
-    .data(monthlyData)
-    .enter()
-    .append("text")
-    .attr("x", centerX + 10)
-    .attr("y", d => yScale(d.date) + 4)
-    .attr("text-anchor", "start")
-    .style("fill", d => (d.balance || 0) >= 0 ? "var(--green-bright)" : "var(--pink-soft)")
-    .text(d => {
-        const balance = d.balance || 0;
-        return balance === 0 ? "0,00" : balance > 0 ? 
-            `+${Formatter.currency(balance)}` : 
-            Formatter.currency(balance);
-    });
+        svg.selectAll(".balance-text")
+            .data(monthlyData)
+            .enter()
+            .append("text")
+            .attr("x", centerX + 10)
+            .attr("y", d => yScale(d.date) + 4)
+            .attr("text-anchor", "start")
+            .style("fill", d => (d.balance || 0) >= 0 ? "var(--green-bright)" : "var(--pink-soft)")
+            .text(d => {
+                const balance = d.balance || 0;
+                return balance === 0 ? "0,00" : balance > 0 ? 
+                    `+${Formatter.currency(balance)}` : 
+                    Formatter.currency(balance);
+            });
 
         // Labels
         svg.append("text")
