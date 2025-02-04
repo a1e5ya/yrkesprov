@@ -165,29 +165,67 @@ const CategoryManager = {
      * Handles type selection, icon selection, and category addition/deletion
      */
     bindEvents() {
+        // Type selection buttons
         ['income', 'expense', 'saving'].forEach(type => {
             const btn = document.getElementById(`${type}-category-btn`);
             if (!btn) return;
-
+    
             btn.addEventListener('click', () => {
                 this.handleTypeSelection(type);
             });
         });
-
+    
+        // Icon selection
         document.querySelectorAll('.category-icons-row i').forEach(icon => {
             icon.addEventListener('click', (e) => this.handleIconSelection(e));
+            // Add keyboard accessibility
+            icon.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.handleIconSelection(e);
+                }
+            });
         });
-
+    
+        // Category form submission
+        const categoryForm = document.getElementById('add-category-container');
+        if (categoryForm) {
+            categoryForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleAddCategory(e);
+            });
+        }
+    
+        // Add button click (as backup for form submission)
         const addBtn = document.getElementById('add-data-category-btn');
         if (addBtn) {
-            addBtn.addEventListener('click', () => this.handleAddCategory());
+            addBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.handleAddCategory(e);
+            });
         }
-
+    
+        // Delete category handling
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('delete-category')) {
                 this.handleDeleteCategory(e);
             }
         });
+    
+        // Form input validation
+        const categoryDescInput = document.getElementById('add-category-desc');
+        if (categoryDescInput) {
+            categoryDescInput.addEventListener('input', () => {
+                categoryDescInput.setCustomValidity('');
+                categoryDescInput.checkValidity();
+            });
+    
+            categoryDescInput.addEventListener('invalid', () => {
+                if (categoryDescInput.value.length === 0) {
+                    categoryDescInput.setCustomValidity('Please enter a category name');
+                }
+            });
+        }
     },
 
     /**
@@ -229,20 +267,37 @@ const CategoryManager = {
      * Handles adding a new category
      * Validates input and updates category list
      */
-    handleAddCategory() {
+    handleAddCategory(event) {
+        // Prevent form submission
+        if (event) {
+            event.preventDefault();
+        }
+    
         const selectedType = this.getSelectedType() || 'income';
         const selectedIcon = document.querySelector('.category-icons-row i.selected');
         const nameInput = document.getElementById('add-category-desc');
-
-        if (!selectedIcon || !nameInput.value) {
+    
+        // If no icon is selected, flash all icons in gold
+        if (!selectedIcon) {
+            const icons = document.querySelectorAll('.category-icons-row i');
+            icons.forEach(icon => {
+                icon.style.color = 'var(--orange-dark)';  
+                setTimeout(() => {
+                    icon.style.color = 'var(--text-primary)';
+                }, 300);  
+            });
             return;
         }
-
+    
+        if (!nameInput.value) {
+            return;
+        }
+    
         this.addCategory(selectedType, {
             name: nameInput.value,
             icon: selectedIcon.className.split(' ')[1]
         });
-
+    
         nameInput.value = '';
         this.resetIconSelection();
         this.populateCategorySelect(selectedType);
